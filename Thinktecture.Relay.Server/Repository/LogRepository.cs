@@ -41,15 +41,14 @@ namespace Thinktecture.Relay.Server.Repository
 			}
 		}
 
-		public IEnumerable<RequestLogEntry> GetRecentLogEntriesForLink(Guid linkId,
-			int amount)
+		public IEnumerable<RequestLogEntry> GetRecentLogEntriesForLink(Guid linkId, int numberOfEntries)
 		{
 			using (var context = new RelayContext())
 			{
 				return
 					context.RequestLogEntries.Where(r => r.LinkId == linkId)
 						.OrderByDescending(e => e.OnPremiseConnectorOutDate)
-						.Take(amount)
+						.Take(numberOfEntries)
 						.ToList()
 						.Select(d => new RequestLogEntry
 						{
@@ -68,13 +67,13 @@ namespace Thinktecture.Relay.Server.Repository
 			}
 		}
 
-		public IEnumerable<RequestLogEntry> GetRecentLogEntries(int amount)
+		public IEnumerable<RequestLogEntry> GetRecentLogEntries(int numberOfEntries)
 		{
 			using (var context = new RelayContext())
 			{
 				return context.RequestLogEntries
 					.OrderByDescending(e => e.OnPremiseConnectorOutDate)
-					.Take(amount)
+					.Take(numberOfEntries)
 					.Select(d => new RequestLogEntry()
 					{
 						OnPremiseConnectorInDate = d.OnPremiseConnectorInDate,
@@ -152,11 +151,11 @@ namespace Thinktecture.Relay.Server.Repository
 			});
 		}
 
-		public IEnumerable<ContentBytesChartDataItem> GetContentBytesChartDataItems()
+		public IEnumerable<ContentBytesChartDataItem> GetContentBytesChartDataItems(int numberOfDays)
 		{
 			var timeFrame = new TimeFrame()
 			{
-				Start = DateTime.Now.AddDays(-7),
+				Start = DateTime.Now.AddDays(-numberOfDays),
 				End = DateTime.Now,
 				Resolution = Resolution.Daily,
 			};
@@ -164,8 +163,7 @@ namespace Thinktecture.Relay.Server.Repository
 			return GetContentBytesChartDataItemsForLink(Guid.Empty, timeFrame);
 		}
 
-		private IQueryable<DbRequestLogEntry> CreateBasicChartDataQuery(RelayContext context, Guid id,
-			TimeFrame timeFrame)
+		private IQueryable<DbRequestLogEntry> CreateBasicChartDataQuery(RelayContext context, Guid id, TimeFrame timeFrame)
 		{
 			var startDate = new DateTime(timeFrame.Start.Year, timeFrame.Start.Month, timeFrame.Start.Day);
 			var endDate = new DateTime(timeFrame.End.Year, timeFrame.End.Month, timeFrame.End.Day, 23, 59, 59, 999);

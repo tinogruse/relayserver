@@ -1,6 +1,4 @@
-using System.Net;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Thinktecture.Relay.Server.Http.Filters;
 using Thinktecture.Relay.Server.Repository;
 
@@ -21,7 +19,7 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 		[HttpGet]
 		public IHttpActionResult NeedsFirstTimeSetup()
 		{
-			return _userRepository.Any() ? Ok() : (IHttpActionResult)new StatusCodeResult(HttpStatusCode.TemporaryRedirect, Request);
+			return Ok(new { Setup = !_userRepository.Any() });
 		}
 	}
 }

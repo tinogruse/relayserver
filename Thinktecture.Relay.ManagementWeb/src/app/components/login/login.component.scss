@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  flex: 1;
+
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  width: 80%;
+
+  position: relative;
+}
+
+mat-card-title {
+  font-size: 16px;
+}
+
+mat-checkbox {
+  margin-left: auto;
+}

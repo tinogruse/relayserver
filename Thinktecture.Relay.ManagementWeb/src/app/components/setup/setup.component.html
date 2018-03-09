@@ -1,0 +1,30 @@
+<form #form="ngForm" (ngSubmit)="submit()">
+  <mat-card>
+    <mat-card-title translate>Welcome to the first time setup</mat-card-title>
+    <mat-card-content class="trs-flex trs-column">
+      <p translate>
+        It seems that this is the first time you are accessing the management web.
+        Please enter the credentials for the admin user prior logging in.
+      </p>
+      <mat-form-field>
+        <input name="username" matInput [placeholder]="'Username' | translate" maxlength="250" required [(ngModel)]="username">
+        <mat-icon matSuffix>account_circle</mat-icon>
+      </mat-form-field>
+      <mat-form-field>
+        <input name="password" matInput [placeholder]="'Password' | translate" maxlength="250" required [(ngModel)]="password">
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+      <mat-form-field>
+        <input name="verifyPassword" matInput [placeholder]="'Verify password' | translate" #verify="ngModel"
+               maxlength="250" required [(ngModel)]="verifyPassword" [trsEquals]="password">
+        <mat-icon matSuffix>lock</mat-icon>
+        <mat-error *ngIf="verify?.errors?.equals" translate>The passwords do not match.</mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button type="submit" mat-button color="primary" [disabled]="form.invalid" translate>Proceed</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <trs-spinner-overlay *ngIf="submitting"></trs-spinner-overlay>
+</form>

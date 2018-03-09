@@ -1,0 +1,63 @@
+<ng-container *ngIf="info$ | async as info; else loading">
+  <mat-tab-group>
+    <mat-tab [label]="'Chart' | translate">
+      <canvas baseChart chartType="line" [labels]="info.chartLabels" [options]="chartOptions"
+              [datasets]="[{ data: info.chartIn, label: 'Content Bytes In' }, { data: info.chartOut, label: 'Content Bytes Out' }]"></canvas>
+    </mat-tab>
+    <mat-tab [label]="'Recent logs' | translate">
+      <mat-table [dataSource]="info.logs">
+        <ng-container matColumnDef="linkId">
+          <mat-header-cell *matHeaderCellDef>Link ID</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.linkId.substr(0, 8) }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="httpStatusCode">
+          <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.httpStatusCode }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="onPremiseTargetKey">
+          <mat-header-cell *matHeaderCellDef>Target</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.onPremiseTargetKey }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="localUrl">
+          <mat-header-cell *matHeaderCellDef>Local URL</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.localUrl }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="contentBytesIn">
+          <mat-header-cell *matHeaderCellDef>Content Bytes In</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.contentBytesIn | number }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="contentBytesOut">
+          <mat-header-cell *matHeaderCellDef>Content Bytes Out</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.contentBytesOut | number }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="onPremiseConnectorInDate">
+          <mat-header-cell *matHeaderCellDef>Connector In Date</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.onPremiseConnectorInDate.format('YYYY-MM-DD HH:mm:ss') }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="onPremiseConnectorOutDate">
+          <mat-header-cell *matHeaderCellDef>Connector Out Date</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.onPremiseConnectorOutDate.format('YYYY-MM-DD HH:mm:ss') }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="onPremiseTargetInDate">
+          <mat-header-cell *matHeaderCellDef>Target Out Date</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.onPremiseTargetInDate?.format('YYYY-MM-DD HH:mm:ss') }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="onPremiseTargetOutDate">
+          <mat-header-cell *matHeaderCellDef>Target Out Date</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.onPremiseTargetOutDate?.format('YYYY-MM-DD HH:mm:ss') }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="originId">
+          <mat-header-cell *matHeaderCellDef>Origin ID</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{ log.originId.substr(0, 8) }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="logColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: logColumns;"></mat-row>
+      </mat-table>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>
+
+<ng-template #loading>
+  <trs-spinner-overlay></trs-spinner-overlay>
+</ng-template>

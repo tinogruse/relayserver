@@ -1,0 +1,26 @@
+:host {
+  height: 100%;
+  display: block;
+
+  @media (min-width: 600px) {
+    padding-top: 64px;
+  }
+
+  @media (max-width: 599px) {
+    padding-top: 56px;
+  }
+}
+
+mat-sidenav-container {
+  height: 100%;
+  position: relative;
+}
+
+.mat-nav-list {
+  .mat-list-item {
+    &:hover,
+    &.mat-list-item-focus {
+      background: none;
+    }
+  }
+}

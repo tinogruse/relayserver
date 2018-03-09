@@ -1,0 +1,16 @@
+{
+  "Please enter your login credentials": "Bitte geben Sie Ihre Zugangsdaten ein",
+  "Username": "Benutzername",
+  "Password": "Passwort",
+  "Remember me": "Zugangdaten merken",
+  "Login": "Anmelden",
+  "Login failed": "Anmeldung fehlgeschlagen",
+  "The login is not possible because the credentials are invalid.": "Die Anmeldung konnte nicht durchgeführt werden, da die Zugangsdaten nicht korrekt sind.",
+  "Welcome to the first time setup": "Willkommen zum initialen Setup",
+  "It seems that this is the first time you are accessing the management web. Please enter the credentials for the admin user prior logging in.": "Es scheint, als wäre dies der erste Aufruf des Management Webs. Bitte legen Sie nun die Zugangsdaten für den Admin Benutzer fest. Danach können Sie sich ganz normal anmelden.",
+  "Verify password": "Passwort wiederholen",
+  "The passwords do not match.": "Die eingegebenen Passwörter sind nicht identisch.",
+  "User was created successfully. You can now log in.": "Der Benutzer wurde angelegt. Sie können sich nun anmelden.",
+  "Creation failed": "Erstellen fehlgeschlagen",
+  "There is already an existing user.": "Es wurde bereits ein Benutzer erstellt."
+}

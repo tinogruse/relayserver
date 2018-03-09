@@ -1,0 +1,14 @@
+<mat-sidenav-container>
+  <mat-sidenav #snav mode="side" [opened]="true">
+    <mat-nav-list>
+      <mat-list-item>
+        <mat-icon>home</mat-icon>
+        <a mat-list-item [routerLink]="['dashboard']" [disableRipple]="true">Dashboard</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

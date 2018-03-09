@@ -19,12 +19,12 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 
 		[HttpGet]
 		[ActionName("info")]
-		public IHttpActionResult Get()
+		public IHttpActionResult Get(int numberOfEntries = 15, int numberOfDays = 7)
 		{
 			var result = new Dashboard()
 			{
-				Logs = _logRepository.GetRecentLogEntries(15),
-				ContentBytesChartDataItems = _logRepository.GetContentBytesChartDataItems()
+				Logs = _logRepository.GetRecentLogEntries(numberOfEntries),
+				Chart = _logRepository.GetContentBytesChartDataItems(numberOfDays)
 			};
 
 			return Ok(result);

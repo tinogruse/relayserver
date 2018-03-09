@@ -1,0 +1,25 @@
+<form #form="ngForm" (ngSubmit)="submit()">
+  <mat-card>
+    <mat-card-title translate>Please enter your login credentials</mat-card-title>
+    <mat-card-content class="trs-flex trs-column">
+      <mat-form-field>
+        <input name="username" matInput [placeholder]="'Username' | translate" maxlength="250" required [(ngModel)]="username">
+        <mat-icon matSuffix>account_circle</mat-icon>
+      </mat-form-field>
+      <mat-form-field>
+        <input name="password" matInput [placeholder]="'Password' | translate" maxlength="250" required [(ngModel)]="password">
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+      <mat-checkbox name="remember" [(ngModel)]="rememberMe">
+        <span translate>Remember me</span>
+      </mat-checkbox>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button type="submit" mat-button color="primary" [disabled]="form.invalid">
+        <span translate>Login</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <trs-spinner-overlay *ngIf="submitting"></trs-spinner-overlay>
+</form>

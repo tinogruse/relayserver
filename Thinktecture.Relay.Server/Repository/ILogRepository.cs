@@ -7,9 +7,9 @@ namespace Thinktecture.Relay.Server.Repository
 	public interface ILogRepository
 	{
 		void LogRequest(RequestLogEntry requestLogEntry);
-		IEnumerable<RequestLogEntry> GetRecentLogEntriesForLink(Guid linkId, int amount);
+		IEnumerable<RequestLogEntry> GetRecentLogEntriesForLink(Guid linkId, int numberOfEntries);
 		IEnumerable<ContentBytesChartDataItem> GetContentBytesChartDataItemsForLink(Guid id, TimeFrame timeFrame);
-		IEnumerable<ContentBytesChartDataItem> GetContentBytesChartDataItems();
-		IEnumerable<RequestLogEntry> GetRecentLogEntries(int amount);
+		IEnumerable<ContentBytesChartDataItem> GetContentBytesChartDataItems(int numberOfDays);
+		IEnumerable<RequestLogEntry> GetRecentLogEntries(int numberOfEntries);
 	}
 }
