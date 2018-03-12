@@ -15,10 +15,10 @@ interface TokenResponse {
 
 @Injectable()
 export class SecurityService {
-  private _accessToken: string | null = null;
+  private _accessToken: string | null = localStorage.getItem('access_token');
+  private _userName: string | null = localStorage.getItem('user_name');
 
   constructor(private readonly _httpClient: HttpClient, private readonly _matDialog: MatDialog) {
-    this._accessToken = localStorage.getItem('access_token');
   }
 
   get authorizationHeader(): { [header: string]: string } {
@@ -29,29 +29,23 @@ export class SecurityService {
     return this._accessToken !== null;
   }
 
-  get username(): string | null {
-    return localStorage.getItem('username');
+  get userName(): string | null {
+    return this._userName;
   }
 
-  set username(value: string | null) {
-    if (value === null) {
-      localStorage.removeItem('username');
-    } else {
-      localStorage.setItem('username', value);
-    }
-  }
-
-  authenticate(username: string, password: string, rememberMe: boolean): Observable<void> {
-    const body = new HttpParams({ fromObject: { grant_type: 'password', username, password } });
+  authenticate(userName: string, password: string, rememberMe: boolean): Observable<void> {
+    const body = new HttpParams({ fromObject: { grant_type: 'password', username: userName, password } });
     return this._httpClient.post<TokenResponse>(`${environment.backendUrl}token`, body).pipe(
       map(response => {
         this._accessToken = response.access_token;
+        this._userName = userName;
 
-        this.username = rememberMe ? username : null;
         if (rememberMe) {
           localStorage.setItem('access_token', response.access_token);
+          localStorage.setItem('user_name', userName);
         } else {
           localStorage.removeItem('access_token');
+          localStorage.removeItem('user_name');
         }
       }),
 
@@ -67,5 +61,10 @@ export class SecurityService {
         return _throw(response);
       }),
     );
+  }
+
+  deauthenticate() {
+    this._userName = this._accessToken = null;
+    localStorage.clear();
   }
 }

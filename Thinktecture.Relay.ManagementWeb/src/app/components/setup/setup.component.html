@@ -7,15 +7,17 @@
         Please enter the credentials for the admin user prior logging in.
       </p>
       <mat-form-field>
-        <input name="username" matInput [placeholder]="'Username' | translate" maxlength="250" required [(ngModel)]="username">
+        <input name="userName" matInput [placeholder]="'User name' | translate"
+               maxlength="250" required [(ngModel)]="userName">
         <mat-icon matSuffix>account_circle</mat-icon>
       </mat-form-field>
       <mat-form-field>
-        <input name="password" matInput [placeholder]="'Password' | translate" maxlength="250" required [(ngModel)]="password">
+        <input type="password" name="password" matInput [placeholder]="'Password' | translate"
+               maxlength="250" required [(ngModel)]="password">
         <mat-icon matSuffix>lock</mat-icon>
       </mat-form-field>
       <mat-form-field>
-        <input name="verifyPassword" matInput [placeholder]="'Verify password' | translate" #verify="ngModel"
+        <input type="password" name="verifyPassword" matInput [placeholder]="'Verify password' | translate" #verify="ngModel"
                maxlength="250" required [(ngModel)]="verifyPassword" [trsEquals]="password">
         <mat-icon matSuffix>lock</mat-icon>
         <mat-error *ngIf="verify?.errors?.equals" translate>The passwords do not match.</mat-error>

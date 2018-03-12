@@ -17,9 +17,8 @@ mat-tab-group {
   flex: none;
 }
 
+.mat-column-localUrl,
 .mat-column-onPremiseTargetKey {
-  width: 100px;
-  flex: none;
 }
 
 .mat-column-httpStatusCode {
@@ -29,7 +28,12 @@ mat-tab-group {
 }
 
 .mat-column-contentBytesIn,
-.mat-column-contentBytesOut,
+.mat-column-contentBytesOut {
+  width: 100px;
+  flex: none;
+  text-align: right;
+}
+
 .mat-column-onPremiseConnectorInDate,
 .mat-column-onPremiseConnectorOutDate,
 .mat-column-onPremiseTargetInDate,

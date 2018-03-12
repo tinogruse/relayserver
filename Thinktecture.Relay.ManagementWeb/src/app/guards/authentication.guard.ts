@@ -13,7 +13,7 @@ export class AuthenticationGuard implements CanActivate {
       return true;
     }
 
-    this._router.navigate(['login']);
+    this._router.navigate(['login'], { queryParams: { userName: this._security.userName }, skipLocationChange: true });
     return false;
   }
 }

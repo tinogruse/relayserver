@@ -1,46 +1,49 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Thinktecture.Relay.Server.Security
 {
 	public class PasswordComplexityValidator : IPasswordComplexityValidator
 	{
-		public bool ValidatePassword(string userName, string password, out string errorMessage)
+		public bool ValidatePassword(string userName, string password, out IEnumerable<string> errorMessages)
 		{
-			errorMessage = null;
+			var result = new List<string>();
 
 			// user must not use the username as password
 			if (userName.Equals(password, StringComparison.InvariantCultureIgnoreCase))
 			{
-				errorMessage += "Username and password must not be the same.\r\n";
+				result.Add("Username and password must not be the same.");
 			}
 
 			if (password.Length < 8)
 			{
-				errorMessage += "Password needs to be at least 8 characters long.\r\n";
+				result.Add("Password needs to be at least 8 characters long.");
 			}
 
 			if (!password.Any(Char.IsLower))
 			{
-				errorMessage += "Password must contain at least one lower case character.\r\n";
+				result.Add("Password must contain at least one lower case character.");
 			}
 
 			if (!password.Any(Char.IsUpper))
 			{
-				errorMessage += "Password must contain at least one upper case character.\r\n";
+				result.Add("Password must contain at least one upper case character.");
 			}
 
 			if (!password.Any(Char.IsDigit))
 			{
-				errorMessage += "Password must contain at least one number.\r\n";
+				result.Add("Password must contain at least one number.");
 			}
 
 			if (password.All(Char.IsLetterOrDigit))
 			{
-				errorMessage += "Password must contain at least one special character.\r\n";
+				result.Add("Password must contain at least one special character.");
 			}
 
-			return String.IsNullOrWhiteSpace(errorMessage);
+			errorMessages = result;
+
+			return result.Count == 0;
 		}
 	}
 }

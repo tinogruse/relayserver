@@ -7,7 +7,7 @@ import {BackendService} from '../../services/backend.service';
   styleUrls: ['./setup.component.scss'],
 })
 export class SetupComponent {
-  username: string;
+  userName: string;
   password: string;
   verifyPassword: string;
   submitting: boolean;
@@ -17,6 +17,6 @@ export class SetupComponent {
 
   submit() {
     this.submitting = true;
-    this._backend.createFirstTimeUser(this.username, this.password).subscribe({ error: () => this.submitting = false });
+    this._backend.createFirstTimeUser(this.userName, this.password).subscribe({ error: () => this.submitting = false });
   }
 }

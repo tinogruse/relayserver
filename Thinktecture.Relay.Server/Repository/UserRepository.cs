@@ -41,7 +41,7 @@ namespace Thinktecture.Relay.Server.Repository
 				Password = passwordInformation.Hash,
 				Salt = passwordInformation.Salt,
 				UserName = userName,
-				CreationDate = DateTime.Now,
+				CreationDate = DateTime.UtcNow,
 			};
 
 			using (var context = new RelayContext())
@@ -88,7 +88,6 @@ namespace Thinktecture.Relay.Server.Repository
 					{
 						UserName = user.UserName,
 						Id = user.Id,
-						CreationDate = user.CreationDate,
 					};
 				}
 

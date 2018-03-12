@@ -1,6 +1,6 @@
 {
   "Please enter your login credentials": "Bitte geben Sie Ihre Zugangsdaten ein",
-  "Username": "Benutzername",
+  "User name": "Benutzername",
   "Password": "Passwort",
   "Remember me": "Zugangdaten merken",
   "Login": "Anmelden",
@@ -12,5 +12,23 @@
   "The passwords do not match.": "Die eingegebenen Passwörter sind nicht identisch.",
   "User was created successfully. You can now log in.": "Der Benutzer wurde angelegt. Sie können sich nun anmelden.",
   "Creation failed": "Erstellen fehlgeschlagen",
-  "There is already an existing user.": "Es wurde bereits ein Benutzer erstellt."
+  "There is already an existing user.": "Es wurde bereits ein Benutzer erstellt.",
+  "Dashboard": "Übersicht",
+  "Users": "Benutzer",
+  "Logout": "Abmelden",
+  "Recent logs": "Letzte Aktivität",
+  "Target": "Ziel",
+  "Local URL": "Lokale URL",
+  "Content bytes in": "Eingehende Bytes",
+  "Content bytes out": "Ausgehende Bytes",
+  "Connector in date": "Startzeit RelayServer",
+  "Connector out date": "Endezeit RelayServer",
+  "Target in date": "Startzeit On-Premise",
+  "Target out date": "Endezeit On-Premise",
+  "Locked until": "Gesperrt bis",
+  "Add user": "Benutzer hinzufügen",
+  "Change password": "Passwort ändern",
+  "Please enter the new password for user USERNAME:": "Bitte geben Sie das neue Passwort für den Benutzer \"{{userName}}\" an:",
+  "Delete user": "Benutzer löschen",
+  "Do you really want to delete the user USERNAME?": "Möchten Sie den Benutzer \"{{userName}}\" wirklich löschen?"
 }

@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, Inject, LOCALE_ID} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'trs-root',
@@ -7,7 +8,10 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(translate: TranslateService) {
-    translate.use('de-DE');
+  constructor(@Inject(LOCALE_ID) locale: string, translate: TranslateService) {
+    translate.setDefaultLang('en');
+    translate.use(locale.substring(0, 2));
+
+    moment.locale(locale);
   }
 }

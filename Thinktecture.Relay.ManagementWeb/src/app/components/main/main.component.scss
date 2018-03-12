@@ -16,6 +16,15 @@ mat-sidenav-container {
   position: relative;
 }
 
+mat-sidenav {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-nav-list:last-of-type {
+  margin-top: auto;
+}
+
 .mat-nav-list {
   .mat-list-item {
     &:hover,

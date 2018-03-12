@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SecurityService} from '../../services/security.service';
 
 @Component({
@@ -8,18 +8,18 @@ import {SecurityService} from '../../services/security.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  username: string;
+  userName: string;
   password: string;
   rememberMe: boolean;
   submitting: boolean;
 
-  constructor(private readonly _security: SecurityService, private readonly _router: Router) {
+  constructor(private readonly _security: SecurityService, private readonly _router: Router, private readonly _route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    const username = this._security.username;
-    if (username) {
-      this.username = username;
+    const { userName } = this._route.snapshot.queryParams;
+    if (userName) {
+      this.userName = userName;
       this.rememberMe = true;
     }
   }
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
   submit() {
     this.submitting = true;
 
-    this._security.authenticate(this.username, this.password, this.rememberMe).subscribe(
+    this._security.authenticate(this.userName, this.password, this.rememberMe).subscribe(
       () => this._router.navigate(['main'], { replaceUrl: true }),
       () => this.submitting = false,
     );

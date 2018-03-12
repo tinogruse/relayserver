@@ -2,6 +2,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {Router} from '@angular/router';
+import * as moment from 'moment';
 import {Observable} from 'rxjs/Observable';
 import {of} from 'rxjs/observable/of';
 import {_throw} from 'rxjs/observable/throw';
@@ -9,19 +10,13 @@ import {catchError, map, mapTo, switchMap, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {SimpleDialogComponent} from '../components/dialogs/simple-dialog/simple-dialog.component';
 import {Dashboard} from '../models/dashboard';
-import {SecurityService} from './security.service';
-import moment = require('moment');
+import {User} from '../models/user';
 
 const backendUrl = `${environment.backendUrl}api/managementweb/`;
 
 @Injectable()
 export class BackendService {
-  constructor(
-    private readonly _httpClient: HttpClient,
-    private readonly _security: SecurityService,
-    private readonly _matDialog: MatDialog,
-    private readonly _router: Router,
-  ) {
+  constructor(private readonly _httpClient: HttpClient, private readonly _matDialog: MatDialog, private readonly _router: Router) {
   }
 
   ensureFirstTimeUser(): Observable<boolean> {
@@ -34,12 +29,11 @@ export class BackendService {
     );
   }
 
-  createFirstTimeUser(username: string, password: string): Observable<void> {
-    return this._httpClient.post(`${backendUrl}user/firsttime`, { username, password }).pipe(
+  createFirstTimeUser(userName: string, password: string): Observable<void> {
+    return this._httpClient.post(`${backendUrl}user/firsttime`, { userName, password }).pipe(
       switchMap(() => this._matDialog.open(SimpleDialogComponent, { data: { content: 'User was created successfully. You can now log in.' } }).afterClosed()), // tslint:disable:max-line-length
       map(() => {
-        this._security.username = username;
-        this._router.navigate(['login'], { replaceUrl: true });
+        this._router.navigate(['login'], { queryParams: { userName }, replaceUrl: true, skipLocationChange: true });
       }),
       catchError(response => {
         const config: MatDialogConfig = { data: { title: 'Creation failed' } };
@@ -48,7 +42,7 @@ export class BackendService {
           switch (response.status) {
             case 403: // Forbidden
               config.data.content = 'There is already an existing user.';
-              this._router.navigate(['login'], { replaceUrl: true });
+              this._router.navigate(['login'], { queryParams: { userName }, replaceUrl: true, skipLocationChange: true });
               break;
             case 400: // Bad Request
               break;
@@ -67,7 +61,7 @@ export class BackendService {
   }
 
   dashboardInfo(): Observable<Dashboard> {
-    return this._httpClient.get<Dashboard>(`${backendUrl}dashboard/info`, { headers: this._security.authorizationHeader }).pipe(
+    return this._httpClient.get<Dashboard>(`${backendUrl}dashboard/info`).pipe(
       tap(dashboard => {
         dashboard.logs.forEach(log => {
           log.onPremiseConnectorInDate = moment(log.onPremiseConnectorInDate);
@@ -83,5 +77,31 @@ export class BackendService {
         dashboard.chart.forEach(chart => chart.key = moment(chart.key));
       }),
     );
+  }
+
+  getUsers(): Observable<User[]> {
+    return this._httpClient.get<User[]>(`${backendUrl}user/users`).pipe(
+      tap(users => {
+        users.forEach(user => {
+          user.creationDate = moment(user.creationDate);
+
+          if (user.lockedUntil) {
+            user.lockedUntil = moment(user.lockedUntil);
+          }
+        });
+      }),
+    );
+  }
+
+  addUser(user: User): Observable<void> {
+    return this._httpClient.post<void>(`${backendUrl}user/user`, user);
+  }
+
+  updateUser(user: User): Observable<void> {
+    return this._httpClient.put<void>(`${backendUrl}user/user`, user);
+  }
+
+  deleteUser(user: User): Observable<void> {
+    return this._httpClient.delete<void>(`${backendUrl}user/user`, { params: { id: user.id } });
   }
 }

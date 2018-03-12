@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -20,6 +21,7 @@ using Microsoft.Owin.Security.DataHandler;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Owin.Security.OAuth;
 using Microsoft.Owin.StaticFiles;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Owin;
 using Owin.Security.AesDataProtectorProvider;
@@ -28,6 +30,7 @@ using Thinktecture.Relay.Server.Config;
 using Thinktecture.Relay.Server.Controller;
 using Thinktecture.Relay.Server.Controller.ManagementWeb;
 using Thinktecture.Relay.Server.Filters;
+using Thinktecture.Relay.Server.Helper;
 using Thinktecture.Relay.Server.Logging;
 using Thinktecture.Relay.Server.Owin;
 using Thinktecture.Relay.Server.Repository;
@@ -251,6 +254,7 @@ namespace Thinktecture.Relay.Server
 			}
 
 			httpConfig.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+			httpConfig.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new DateTimeConverter());
 
 			return httpConfig;
 		}

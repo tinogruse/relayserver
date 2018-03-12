@@ -1,5 +1,5 @@
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {NgModule} from '@angular/core';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {
   MatButtonModule,
@@ -8,17 +8,18 @@ import {
   MatDialogModule,
   MatIconModule,
   MatInputModule,
-  MatListModule,
+  MatListModule, MatMenuModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
+  MatTooltipModule,
 } from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {ChartsModule} from 'ng2-charts';
 
@@ -29,11 +30,19 @@ import {LoginComponent} from './components/login/login.component';
 import {MainComponent} from './components/main/main.component';
 import {SetupComponent} from './components/setup/setup.component';
 import {SpinnerOverlayComponent} from './components/spinner-overlay/spinner-overlay.component';
+import {UsersComponent} from './components/users/users.component';
 import {EqualsDirective} from './directives/equals.directive';
 import {AuthenticationGuard} from './guards/authentication.guard';
 import {FirstTimeSetupGuard} from './guards/first-time-setup.guard';
+import {AuthorizationInterceptor} from './interceptors/authorization.interceptor';
 import {BackendService} from './services/backend.service';
 import {SecurityService} from './services/security.service';
+import { DialogCloseDirective } from './directives/dialog-close.directive';
+
+export function localeIdFactory(translate: TranslateService) {
+  const match = window.location.search.match(/[?&]localeid=(.{2,}?-.{2,}?)(?:&|$)/i);
+  return match && match[1] || translate.getBrowserCultureLang();
+}
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -49,6 +58,8 @@ export function createTranslateLoader(http: HttpClient) {
     SpinnerOverlayComponent,
     EqualsDirective,
     DashboardComponent,
+    UsersComponent,
+    DialogCloseDirective,
   ],
   imports: [
     BrowserModule,
@@ -68,7 +79,9 @@ export function createTranslateLoader(http: HttpClient) {
       { path: 'login', canActivate: [FirstTimeSetupGuard], component: LoginComponent },
       {
         path: 'main', canActivate: [AuthenticationGuard], component: MainComponent, children: [
+          { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
           { path: 'dashboard', component: DashboardComponent },
+          { path: 'users', component: UsersComponent },
         ],
       },
     ], { useHash: true }),
@@ -85,8 +98,13 @@ export function createTranslateLoader(http: HttpClient) {
     MatProgressSpinnerModule,
     MatTabsModule,
     MatTableModule,
+    MatTooltipModule,
+    MatMenuModule,
   ],
   providers: [
+    { provide: LOCALE_ID, useFactory: localeIdFactory, deps: [TranslateService] },
+    { provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthorizationInterceptor },
+
     SecurityService,
     BackendService,
 

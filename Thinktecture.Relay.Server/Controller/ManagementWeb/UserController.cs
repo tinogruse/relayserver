@@ -79,9 +79,9 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 			httpActionResult = null;
 
 			// validate password complexity by other rules
-			if (!_passwordComplexityValidator.ValidatePassword(user.UserName, user.Password, out var errorMessage))
+			if (!_passwordComplexityValidator.ValidatePassword(user.UserName, user.Password, out var errorMessages))
 			{
-				httpActionResult = BadRequest(errorMessage);
+				httpActionResult = BadRequest(String.Join("\n", errorMessages));
 				return false;
 			}
 
@@ -121,15 +121,15 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 			}
 
 			// OldPassword needs to be correct
-			var authenticatedUser = _userRepository.Authenticate(user.UserName, user.PasswordOld);
+			var authenticatedUser = _userRepository.Authenticate(user.UserName, user.CurrentPassword);
 			if (authenticatedUser == null)
 			{
-				return BadRequest("Old password not okay");
+				return BadRequest("Current password is not correct.");
 			}
 
-			if (user.PasswordOld == user.Password)
+			if (user.CurrentPassword == user.Password)
 			{
-				return BadRequest("New password must be different from old one");
+				return BadRequest("New password must be different from current one.");
 			}
 
 			if (!CheckPassword(user, out var error))

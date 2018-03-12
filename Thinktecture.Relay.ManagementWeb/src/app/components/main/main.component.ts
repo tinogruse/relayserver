@@ -1,4 +1,6 @@
 import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {SecurityService} from '../../services/security.service';
 
 @Component({
   selector: 'trs-main',
@@ -6,4 +8,16 @@ import {Component} from '@angular/core';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent {
+  constructor(private readonly _security: SecurityService, private readonly _router: Router) {
+  }
+
+  readonly menu = [
+    { caption: 'Dashboard', icon: 'home', route: ['dashboard'] },
+    { caption: 'Users', icon: 'supervisor_account', route: ['users'] },
+  ];
+
+  logout() {
+    this._security.deauthenticate();
+    this._router.navigate(['login']);
+  }
 }

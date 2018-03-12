@@ -155,8 +155,8 @@ namespace Thinktecture.Relay.Server.Repository
 		{
 			var timeFrame = new TimeFrame()
 			{
-				Start = DateTime.Now.AddDays(-numberOfDays),
-				End = DateTime.Now,
+				Start = DateTime.UtcNow.AddDays(-numberOfDays),
+				End = DateTime.UtcNow,
 				Resolution = Resolution.Daily,
 			};
 

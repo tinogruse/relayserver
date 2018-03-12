@@ -3,11 +3,13 @@
     <mat-card-title translate>Please enter your login credentials</mat-card-title>
     <mat-card-content class="trs-flex trs-column">
       <mat-form-field>
-        <input name="username" matInput [placeholder]="'Username' | translate" maxlength="250" required [(ngModel)]="username">
+        <input name="userName" matInput [placeholder]="'User name' | translate"
+               maxlength="250" required [(ngModel)]="userName">
         <mat-icon matSuffix>account_circle</mat-icon>
       </mat-form-field>
       <mat-form-field>
-        <input name="password" matInput [placeholder]="'Password' | translate" maxlength="250" required [(ngModel)]="password">
+        <input type="password" name="password" matInput [placeholder]="'Password' | translate"
+               maxlength="250" required [(ngModel)]="password">
         <mat-icon matSuffix>lock</mat-icon>
       </mat-form-field>
       <mat-checkbox name="remember" [(ngModel)]="rememberMe">
@@ -15,9 +17,7 @@
       </mat-checkbox>
     </mat-card-content>
     <mat-card-actions align="end">
-      <button type="submit" mat-button color="primary" [disabled]="form.invalid">
-        <span translate>Login</span>
-      </button>
+      <button type="submit" mat-button color="primary" [disabled]="form.invalid"><span translate>Login</span></button>
     </mat-card-actions>
   </mat-card>
 
