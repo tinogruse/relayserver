@@ -21,6 +21,10 @@ mat-sidenav {
   flex-direction: column;
 }
 
+mat-sidenav-content {
+  padding: 16px;
+}
+
 mat-nav-list:last-of-type {
   margin-top: auto;
 }

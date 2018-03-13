@@ -14,6 +14,7 @@ export class MainComponent {
   readonly menu = [
     { caption: 'Dashboard', icon: 'home', route: ['dashboard'] },
     { caption: 'Users', icon: 'supervisor_account', route: ['users'] },
+    { caption: 'Links', icon: 'link', route: ['links'] },
   ];
 
   logout() {

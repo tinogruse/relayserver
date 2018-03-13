@@ -25,7 +25,7 @@ namespace Thinktecture.Relay.Server.Repository
 		{
 			if (paging.PageSize > 0)
 			{
-				query = query.Skip((paging.Page - 1) * paging.PageSize);
+				query = query.Skip(paging.PageIndex * paging.PageSize);
 				query = query.Take(paging.PageSize);
 			}
 

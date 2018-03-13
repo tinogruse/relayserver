@@ -1,6 +1,6 @@
 <ng-container *ngIf="info$ | async as info; else loading">
-  <mat-tab-group>
-    <mat-tab [label]="'Chart' | translate">
+  <mat-tab-group class="mat-elevation-z8">
+    <mat-tab [label]="'Chart' | translate" class="trs-chart">
       <canvas baseChart chartType="line" [labels]="info.chartLabels" [options]="chartOptions"
               [datasets]="info.chartData"></canvas>
     </mat-tab>
@@ -31,11 +31,11 @@
           <mat-cell *matCellDef="let log">{{ log.contentBytesOut | number }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="onPremiseConnectorInDate">
-          <mat-header-cell *matHeaderCellDef><span translate>Connector in date</span></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef><span translate>Relay server in date</span></mat-header-cell>
           <mat-cell *matCellDef="let log">{{ log.onPremiseConnectorInDate.format('L LTS') }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="onPremiseConnectorOutDate">
-          <mat-header-cell *matHeaderCellDef><span translate>Connector out date</span></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef><span translate>Relay server out date</span></mat-header-cell>
           <mat-cell *matCellDef="let log">{{ log.onPremiseConnectorOutDate.format('L LTS') }}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="onPremiseTargetInDate">

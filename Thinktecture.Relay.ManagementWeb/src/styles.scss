@@ -10,6 +10,14 @@ body {
   box-sizing: border-box;
 }
 
+.mat-header-cell {
+  font-size: 14px;
+}
+
+.mat-sort-header-container {
+  align-items: center;
+}
+
 .trs-flex.trs-flex {
   display: flex;
 

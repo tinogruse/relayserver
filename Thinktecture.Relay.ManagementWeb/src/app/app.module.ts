@@ -8,9 +8,9 @@ import {
   MatDialogModule,
   MatIconModule,
   MatInputModule,
-  MatListModule, MatMenuModule,
+  MatListModule, MatMenuModule, MatPaginatorModule,
   MatProgressSpinnerModule,
-  MatSidenavModule,
+  MatSidenavModule, MatSortModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
@@ -38,6 +38,8 @@ import {AuthorizationInterceptor} from './interceptors/authorization.interceptor
 import {BackendService} from './services/backend.service';
 import {SecurityService} from './services/security.service';
 import { DialogCloseDirective } from './directives/dialog-close.directive';
+import { LinksComponent } from './components/links/links.component';
+import { UserNameAvailableDirective } from './directives/user-name-available.directive';
 
 export function localeIdFactory(translate: TranslateService) {
   const match = window.location.search.match(/[?&]localeid=(.{2,}?-.{2,}?)(?:&|$)/i);
@@ -60,6 +62,8 @@ export function createTranslateLoader(http: HttpClient) {
     DashboardComponent,
     UsersComponent,
     DialogCloseDirective,
+    LinksComponent,
+    UserNameAvailableDirective,
   ],
   imports: [
     BrowserModule,
@@ -82,6 +86,7 @@ export function createTranslateLoader(http: HttpClient) {
           { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
           { path: 'dashboard', component: DashboardComponent },
           { path: 'users', component: UsersComponent },
+          { path: 'links', component: LinksComponent },
         ],
       },
     ], { useHash: true }),
@@ -100,6 +105,8 @@ export function createTranslateLoader(http: HttpClient) {
     MatTableModule,
     MatTooltipModule,
     MatMenuModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
   providers: [
     { provide: LOCALE_ID, useFactory: localeIdFactory, deps: [TranslateService] },
