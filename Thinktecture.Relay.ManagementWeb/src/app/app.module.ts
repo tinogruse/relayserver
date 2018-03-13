@@ -8,9 +8,12 @@ import {
   MatDialogModule,
   MatIconModule,
   MatInputModule,
-  MatListModule, MatMenuModule, MatPaginatorModule,
+  MatListModule,
+  MatMenuModule,
+  MatPaginatorModule,
   MatProgressSpinnerModule,
-  MatSidenavModule, MatSortModule,
+  MatSidenavModule,
+  MatSortModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
@@ -25,21 +28,22 @@ import {ChartsModule} from 'ng2-charts';
 
 import {AppComponent} from './app.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
-import {SimpleDialogComponent} from './components/dialogs/simple-dialog/simple-dialog.component';
+import {SimpleDialogComponent} from './components/simple-dialog/simple-dialog.component';
+import {LinkComponent} from './components/link/link.component';
+import {LinksComponent} from './components/links/links.component';
 import {LoginComponent} from './components/login/login.component';
 import {MainComponent} from './components/main/main.component';
 import {SetupComponent} from './components/setup/setup.component';
 import {SpinnerOverlayComponent} from './components/spinner-overlay/spinner-overlay.component';
 import {UsersComponent} from './components/users/users.component';
+import {DialogCloseDirective} from './directives/dialog-close.directive';
 import {EqualsDirective} from './directives/equals.directive';
+import {UserNameAvailableDirective} from './directives/user-name-available.directive';
 import {AuthenticationGuard} from './guards/authentication.guard';
 import {FirstTimeSetupGuard} from './guards/first-time-setup.guard';
 import {AuthorizationInterceptor} from './interceptors/authorization.interceptor';
 import {BackendService} from './services/backend.service';
 import {SecurityService} from './services/security.service';
-import { DialogCloseDirective } from './directives/dialog-close.directive';
-import { LinksComponent } from './components/links/links.component';
-import { UserNameAvailableDirective } from './directives/user-name-available.directive';
 
 export function localeIdFactory(translate: TranslateService) {
   const match = window.location.search.match(/[?&]localeid=(.{2,}?-.{2,}?)(?:&|$)/i);
@@ -64,6 +68,7 @@ export function createTranslateLoader(http: HttpClient) {
     DialogCloseDirective,
     LinksComponent,
     UserNameAvailableDirective,
+    LinkComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,7 +91,12 @@ export function createTranslateLoader(http: HttpClient) {
           { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
           { path: 'dashboard', component: DashboardComponent },
           { path: 'users', component: UsersComponent },
-          { path: 'links', component: LinksComponent },
+          {
+            path: 'links', children: [
+              { path: '', pathMatch: 'full', component: LinksComponent },
+              { path: ':id', component: LinkComponent },
+            ],
+          },
         ],
       },
     ], { useHash: true }),

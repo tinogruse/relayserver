@@ -9,7 +9,7 @@ import {Link} from '../../models/link';
 import {PageRequest} from '../../models/pageRequest';
 import {PageResult} from '../../models/pageResult';
 import {BackendService} from '../../services/backend.service';
-import {SimpleDialogComponent} from '../dialogs/simple-dialog/simple-dialog.component';
+import {SimpleDialogComponent} from '../simple-dialog/simple-dialog.component';
 
 @Component({
   selector: 'trs-links',
@@ -30,6 +30,7 @@ export class LinksComponent implements OnInit {
 
   @ViewChild('create') create: TemplateRef<any>;
   @ViewChild('delete') delete: TemplateRef<any>;
+  @ViewChild('credentials') credentials: TemplateRef<any>;
 
   readonly pageRequest: PageRequest = {
     pageIndex: 0,
@@ -92,6 +93,11 @@ export class LinksComponent implements OnInit {
     link.userName = value ? value.replace(/\s/g, '-') : '';
   }
 
+  copyPassword(input: HTMLInputElement) {
+    input.select();
+    document.execCommand('copy');
+  }
+
   openCreate() {
     const link = {} as Link;
     defer(() => this._openDialog(this.create, link)).pipe(
@@ -104,6 +110,7 @@ export class LinksComponent implements OnInit {
           },
         }).afterClosed()),
       )),
+      tap(result => this._matDialog.open(this.credentials, { data: { link: result } })),
     ).subscribe(() => this._refresh$.next(true));
   }
 

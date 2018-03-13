@@ -21,15 +21,17 @@
   "Local URL": "Lokale URL",
   "Content bytes in": "Eingehende Bytes",
   "Content bytes out": "Ausgehende Bytes",
-  "Relay server in date": "Startzeit RelayServer",
-  "Relay server out date": "Endezeit RelayServer",
-  "Target in date": "Startzeit On-Premise",
-  "Target out date": "Endezeit On-Premise",
+  "Relay server in date": "Eingangszeit Relay Server",
+  "Relay server out date": "Ausgangszeit Relay Server",
+  "Target in date": "Eingangszeit On-Premise",
+  "Target out date": "Ausgangszeit On-Premise",
   "Locked until": "Gesperrt bis",
   "Create user": "Benutzer erstellen",
   "Change password": "Passwort ändern",
   "Please enter the new password for user USERNAME:": "Bitte geben Sie das neue Passwort für den Benutzer \"{{userName}}\" an:",
   "Delete user": "Benutzer löschen",
   "Do you really want to delete the user USERNAME?": "Möchten Sie den Benutzer \"{{userName}}\" wirklich löschen?",
-  "Do you really want to delete the link SYMBOLICNAME?": "Möchten Sie den Link \"{{symbolicName}}\" wirklich löschen?"
+  "Do you really want to delete the link SYMBOLICNAME?": "Möchten Sie den Link \"{{symbolicName}}\" wirklich löschen?",
+  "Connected": "Verbunden",
+  "Disconnected": "Getrennt"
 }

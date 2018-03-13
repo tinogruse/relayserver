@@ -8,7 +8,7 @@ import {of} from 'rxjs/observable/of';
 import {_throw} from 'rxjs/observable/throw';
 import {catchError, map, mapTo, switchMap, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
-import {SimpleDialogComponent} from '../components/dialogs/simple-dialog/simple-dialog.component';
+import {SimpleDialogComponent} from '../components/simple-dialog/simple-dialog.component';
 import {Dashboard} from '../models/dashboard';
 import {Link} from '../models/link';
 import {PageRequest} from '../models/pageRequest';

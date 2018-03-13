@@ -8,7 +8,7 @@ import {Link} from '../../models/link';
 import {User} from '../../models/user';
 import {BackendService} from '../../services/backend.service';
 import {SecurityService} from '../../services/security.service';
-import {SimpleDialogComponent} from '../dialogs/simple-dialog/simple-dialog.component';
+import {SimpleDialogComponent} from '../simple-dialog/simple-dialog.component';
 
 @Component({
   selector: 'trs-users',

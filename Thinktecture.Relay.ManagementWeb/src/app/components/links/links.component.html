@@ -18,9 +18,7 @@
       <mat-cell *matCellDef="let link">{{ link.creationDate.format('L LTS') }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="isConnected">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <mat-icon>cloud_circle</mat-icon>
-      </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let link">
         <mat-icon *ngIf="link.isConnected" [matTooltip]="'Connected' | translate" matTooltipPosition="left">cloud</mat-icon>
         <mat-icon *ngIf="!link.isConnected" [matTooltip]="'Disconnected' | translate" matTooltipPosition="left">cloud_off</mat-icon>
@@ -89,6 +87,26 @@
   </div>
   <div mat-dialog-actions align="end">
     <button mat-button matDialogClose><span translate>Cancel</span></button>
-    <button mat-button color="warning" [matDialogClose]="data.link"><span translate>Delete</span></button>
+    <button mat-button color="warn" [matDialogClose]="data.link"><span translate>Delete</span></button>
+  </div>
+</ng-template>
+
+<ng-template #credentials let-data>
+  <h1 mat-dialog-title translate>Link created</h1>
+  <div mat-dialog-content>
+    <p translate>Your link has been created successfully. Please use the following credentials to authenticate:</p>
+    <mat-list>
+      <mat-list-item>
+        <span translate (click)="userName.select()">User name</span>
+        <input matInput readonly [value]="data.link.userName" #userName>
+      </mat-list-item>
+      <mat-list-item>
+        <span translate (click)="password.select()">Password</span>
+        <input matInput readonly [value]="data.link.password" #password>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button color="primary" matDialogClose (click)="copyPassword(password)"><span translate>Copy password</span></button>
   </div>
 </ng-template>

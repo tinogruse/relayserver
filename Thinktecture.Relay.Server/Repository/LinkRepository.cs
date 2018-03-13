@@ -205,7 +205,7 @@ namespace Thinktecture.Relay.Server.Repository
 
 				var result = new CreateLinkResult()
 				{
-					Id = link.Id,
+					UserName = userName,
 					Password = Convert.ToBase64String(password),
 				};
 

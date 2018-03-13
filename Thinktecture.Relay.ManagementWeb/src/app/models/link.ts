@@ -10,6 +10,7 @@ export interface Connection {
 export interface Link {
   id: string;
   userName: string;
+  password: string;
   creationDate: Moment;
   isConnected: boolean;
   connections: Connection[];

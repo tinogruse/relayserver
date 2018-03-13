@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import {_throw} from 'rxjs/observable/throw';
 import {catchError, map} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
-import {SimpleDialogComponent} from '../components/dialogs/simple-dialog/simple-dialog.component';
+import {SimpleDialogComponent} from '../components/simple-dialog/simple-dialog.component';
 
 interface TokenResponse {
   access_token: string;
