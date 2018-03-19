@@ -1,0 +1,41 @@
+p {
+  margin: 20px;
+  text-align: center;
+}
+
+.mat-header-cell,
+.mat-cell {
+  padding: 0 4px;
+}
+
+.mat-column-linkId,
+.mat-column-originId {
+  width: 80px;
+  flex: none;
+}
+
+.mat-column-localUrl,
+.mat-column-onPremiseTargetKey {
+}
+
+.mat-column-httpStatusCode {
+  width: 50px;
+  flex: none;
+  text-align: right;
+}
+
+.mat-column-contentBytesIn,
+.mat-column-contentBytesOut {
+  width: 100px;
+  flex: none;
+  text-align: right;
+}
+
+.mat-column-onPremiseConnectorInDate,
+.mat-column-onPremiseConnectorOutDate,
+.mat-column-onPremiseTargetInDate,
+.mat-column-onPremiseTargetOutDate {
+  width: 100px;
+  flex: none;
+  text-align: right;
+}

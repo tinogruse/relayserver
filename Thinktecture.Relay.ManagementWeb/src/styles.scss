@@ -18,8 +18,22 @@ body {
   align-items: center;
 }
 
+router-outlet + * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.trs-overflow {
+  overflow: auto;
+}
+
 .trs-flex.trs-flex {
   display: flex;
+
+  &.trs-full {
+    flex: 1;
+  }
 
   &.trs-center:not(.trs-horizontal):not(.trs-vertical) {
     justify-content: center;

@@ -1,0 +1,11 @@
+<ng-container *ngIf="data?.length; else loading">
+  <canvas *ngIf="data[0].length; else empty" baseChart chartType="line" [labels]="labels" [options]="options" [datasets]="data"></canvas>
+
+  <ng-template #empty>
+    <p translate>There is no data available.</p>
+  </ng-template>
+</ng-container>
+
+<ng-template #loading>
+  <trs-spinner-overlay></trs-spinner-overlay>
+</ng-template>

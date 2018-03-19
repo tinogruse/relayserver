@@ -374,21 +374,21 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 		{
 			if (request.AcknowledgmentMode == AcknowledgmentMode.Auto)
 			{
-				_logger?.Debug("Automatically acknowledged by RelayServer. request-id={RequestId}", request.RequestId);
+				_logger?.Debug("Automatically acknowledged by RelayServer. request-id={RequestId}, connection-id={ConnectionId}", request.RequestId, ConnectionId);
 				return;
 			}
 
 			if (String.IsNullOrEmpty(request.AcknowledgeId))
 			{
-				_logger?.Debug("No acknowledgment possible. request-id={RequestId}, acknowledgment-mode={AcknowledgmentMode}", request.RequestId, request.AcknowledgmentMode);
+				_logger?.Debug("No acknowledgment possible. request-id={RequestId}, connection-id={ConnectionId}, acknowledgment-mode={AcknowledgmentMode}", request.RequestId, ConnectionId, request.AcknowledgmentMode);
 				return;
 			}
 
 			switch (request.AcknowledgmentMode)
 			{
 				case AcknowledgmentMode.Default:
-					_logger?.Debug("Sending acknowledge to RelayServer. request-id={RequestId}, origin-id={OriginId}, acknowledge-id={AcknowledgeId}", request.RequestId, request.AcknowledgeOriginId, request.AcknowledgeId);
-					await GetToRelay($"/request/acknowledge?oid={request.AcknowledgeOriginId}&aid={request.AcknowledgeId}&cid={ConnectionId}", CancellationToken.None).ConfigureAwait(false); // TODO no cancellation token here?
+					_logger?.Debug("Sending acknowledge to RelayServer. request-id={RequestId}, connection-id={ConnectionId}, acknowledge-id={AcknowledgeId}", request.RequestId, ConnectionId, request.AcknowledgeId);
+					await GetToRelay($"/request/acknowledge?id={ConnectionId}&tag={request.AcknowledgeId}", CancellationToken.None).ConfigureAwait(false);
 					break;
 
 				case AcknowledgmentMode.Manual:
@@ -396,7 +396,7 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 					break;
 
 				default:
-					_logger?.Warning("Unknown acknowledgment mode found. request-id={RequestId}, acknowledgment-mode={AcknowledgmentMode}, acknowledge-id={AcknowledgeId}", request.RequestId, request.AcknowledgmentMode, request.AcknowledgeId);
+					_logger?.Warning("Unknown acknowledgment mode found. request-id={RequestId}, connection-id={ConnectionId}, acknowledgment-mode={AcknowledgmentMode}, acknowledge-id={AcknowledgeId}", request.RequestId, ConnectionId, request.AcknowledgmentMode, request.AcknowledgeId);
 					break;
 			}
 		}

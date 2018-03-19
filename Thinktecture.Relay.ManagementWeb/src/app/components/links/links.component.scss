@@ -3,6 +3,11 @@
   display: block;
 }
 
+a.mat-button {
+  min-width: auto;
+  padding: 0;
+}
+
 .mat-column-creationDate {
   width: 150px;
   flex: none;
@@ -21,8 +26,8 @@
 
 .mat-fab {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
+  top: 53px;
+  right: 36px;
 }
 
 form {

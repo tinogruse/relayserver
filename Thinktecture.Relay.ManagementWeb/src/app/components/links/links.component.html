@@ -3,39 +3,41 @@
     <input matInput (keyup)="applyFilter($event.target.value)" [placeholder]="'Filter' | translate">
   </mat-form-field>
 
-  <mat-table [dataSource]="result.items" matSort [matSortDisableClear]="true" matSortActive="symbolicName" matSortDirection="asc"
-             (matSortChange)="changeSort($event)">
-    <ng-container matColumnDef="symbolicName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>Symbolic name</span></mat-header-cell>
-      <mat-cell *matCellDef="let link">{{ link.symbolicName }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="userName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>User name</span></mat-header-cell>
-      <mat-cell *matCellDef="let link">{{ link.userName }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="creationDate">
-      <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>Creation date</span></mat-header-cell>
-      <mat-cell *matCellDef="let link">{{ link.creationDate.format('L LTS') }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="isConnected">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell *matCellDef="let link">
-        <mat-icon *ngIf="link.isConnected" [matTooltip]="'Connected' | translate" matTooltipPosition="left">cloud</mat-icon>
-        <mat-icon *ngIf="!link.isConnected" [matTooltip]="'Disconnected' | translate" matTooltipPosition="left">cloud_off</mat-icon>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="options">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell *matCellDef="let link">
-        <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ $implicit: link }">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-      </mat-cell>
-    </ng-container>
+  <div class="trs-overflow">
+    <mat-table [dataSource]="result.items" matSort [matSortDisableClear]="true" matSortActive="symbolicName" matSortDirection="asc"
+               (matSortChange)="changeSort($event)">
+      <ng-container matColumnDef="symbolicName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>Symbolic name</span></mat-header-cell>
+        <mat-cell *matCellDef="let link"><a [routerLink]="[link.id]" class="mat-button mat-primary">{{ link.symbolicName }}</a></mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="userName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>User name</span></mat-header-cell>
+        <mat-cell *matCellDef="let link">{{ link.userName }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="creationDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>Creation date</span></mat-header-cell>
+        <mat-cell *matCellDef="let link">{{ link.creationDate.format('L LTS') }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="isConnected">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let link">
+          <mat-icon *ngIf="link.isConnected" [matTooltip]="'Connected' | translate" matTooltipPosition="left">cloud</mat-icon>
+          <mat-icon *ngIf="!link.isConnected" [matTooltip]="'Disconnected' | translate" matTooltipPosition="left">cloud_off</mat-icon>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="options">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let link">
+          <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ $implicit: link }">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
-  </mat-table>
+      <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+    </mat-table>
+  </div>
 
   <mat-paginator #paginator [pageIndex]="pageRequest.pageIndex" [pageSize]="pageRequest.pageSize" [pageSizeOptions]="pageSizes"
                  [length]="result.count" [showFirstLastButtons]="true" (page)="changePage($event)"></mat-paginator>

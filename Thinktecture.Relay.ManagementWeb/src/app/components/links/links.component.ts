@@ -6,8 +6,8 @@ import {combineLatest} from 'rxjs/observable/combineLatest';
 import {defer} from 'rxjs/observable/defer';
 import {filter, finalize, retryWhen, switchMap, tap} from 'rxjs/operators';
 import {Link} from '../../models/link';
-import {PageRequest} from '../../models/pageRequest';
-import {PageResult} from '../../models/pageResult';
+import {PageRequest} from '../../models/page-request';
+import {PageResult} from '../../models/page-result';
 import {BackendService} from '../../services/backend.service';
 import {SimpleDialogComponent} from '../simple-dialog/simple-dialog.component';
 

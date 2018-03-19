@@ -1,0 +1,5 @@
+<trs-chart *ngIf="chart$ | async as chart; else loading" [contentBytes]="chart"></trs-chart>
+
+<ng-template #loading>
+  <trs-spinner-overlay></trs-spinner-overlay>
+</ng-template>

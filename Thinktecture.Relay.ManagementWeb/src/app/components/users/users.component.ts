@@ -4,7 +4,6 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {defer} from 'rxjs/observable/defer';
 import {filter, finalize, retryWhen, switchMap, tap} from 'rxjs/operators';
-import {Link} from '../../models/link';
 import {User} from '../../models/user';
 import {BackendService} from '../../services/backend.service';
 import {SecurityService} from '../../services/security.service';
@@ -50,6 +49,10 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.sort.changes.subscribe(() => this.dataSource.sort = this.sort.first);
+  }
+
+  applyFilter(value: string) {
+    this.dataSource.filter = value;
   }
 
   private _openDialog(templateRef: TemplateRef<any>, user: User): Observable<User> {

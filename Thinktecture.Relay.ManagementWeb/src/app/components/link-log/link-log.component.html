@@ -1,0 +1,5 @@
+<trs-request-log *ngIf="logs$ | async as logs; else loading" [logs]="logs" [hideLinkId]="true"></trs-request-log>
+
+<ng-template #loading>
+  <trs-spinner-overlay></trs-spinner-overlay>
+</ng-template>
