@@ -12,6 +12,7 @@ namespace Thinktecture.Relay.Server.Repository
 		public static IQueryable<T> OrderByPropertyName<T>(this IQueryable<T> query, string column,
 			SortDirection sortDirection)
 		{
+			if (column == "displayName") column = "symbolicName"; // FIXME remove this when database column is renamed
 			var parameter = Expression.Parameter(typeof(T), "param");
 			var property = Expression.Property(parameter, column);
 			var expression = Expression.Lambda(property, parameter);
