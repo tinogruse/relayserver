@@ -3,19 +3,23 @@ using System.Collections.Generic;
 
 namespace Thinktecture.Relay.Server.Dto
 {
-	public class LinkDetails : Link
+	public class LinkDetails
 	{
+		public Guid Id { get; set; }
 		public string UserName { get; set; }
-		public int MaximumLinks { get; set; }
+		public string DisplayName { get; set; }
+		public bool IsDisabled { get; set; }
+		public int MaximumConnections { get; set; }
 		public DateTime CreationDate { get; set; }
+		public bool AllowLocalClientRequestsOnly { get; set; }
+		public bool ForwardOnPremiseTargetErrorResponse { get; set; }
 
-		public bool IsConnected => Connections.Count > 0;
+		public int ConnectionCount => Connections.Count;
 
-		private List<string> _connections;
-
-		public List<string> Connections
+		private List<LinkConnection> _connections;
+		public List<LinkConnection> Connections
 		{
-			get => _connections ?? (_connections = new List<string>());
+			get => _connections ?? (_connections = new List<LinkConnection>());
 			set => _connections = value;
 		}
 

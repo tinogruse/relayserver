@@ -88,7 +88,7 @@ namespace Thinktecture.Relay.Server.Controller
 
 			var requestId = "239b6e03-9795-450d-bdd1-ab72900f1a98";
 			var linkId = new Guid("fb35e2fb-5fb6-4475-baa0-e0b06f5fdeda");
-			var linkFake = new Link { Id = linkId };
+			var linkFake = new LinkRelayInfo() { Id = linkId };
 			var clientRequestFake = new OnPremiseConnectorRequest { RequestId = requestId };
 			var onPremiseTargetReponseFake = new OnPremiseConnectorResponse();
 			var httpResponseMessageFake = new HttpResponseMessage { StatusCode = HttpStatusCode.Found };
@@ -97,7 +97,7 @@ namespace Thinktecture.Relay.Server.Controller
 
 			_loggerMock.Setup(l => l.Verbose(It.IsAny<string>()));
 			_backendCommunicationMock.SetupGet(b => b.OriginId).Returns(originId);
-			_relayRepositoryMock.Setup(l => l.GetLink(It.IsAny<string>())).Returns(linkFake);
+			_relayRepositoryMock.Setup(l => l.GetLinkRelayInfo(It.IsAny<string>())).Returns(linkFake);
 			_pathSplitterMock.Setup(p => p.Split(It.IsAny<string>())).Returns(new PathInformation { PathWithoutUserName = "Bar/Baz" });
 			_clientRequestBuilderMock.Setup(c => c.BuildFromHttpRequest(sut.Request, originId, "Bar/Baz")).ReturnsAsync(clientRequestFake);
 			_backendCommunicationMock.Setup(b => b.SendOnPremiseConnectorRequest(linkId, clientRequestFake));
@@ -146,7 +146,7 @@ namespace Thinktecture.Relay.Server.Controller
 			HttpResponseMessage result;
 
 			_loggerMock.Setup(l => l.Verbose(It.IsAny<string>()));
-			_relayRepositoryMock.Setup(l => l.GetLink(It.IsAny<string>())).Returns(() => null);
+			_relayRepositoryMock.Setup(l => l.GetLinkRelayInfo(It.IsAny<string>())).Returns(() => null);
 			_pathSplitterMock.Setup(p => p.Split(It.IsAny<string>())).Returns(new PathInformation());
 
 			result = await sut.Relay("invalid/targetKey/foo.html");
@@ -164,7 +164,7 @@ namespace Thinktecture.Relay.Server.Controller
 			HttpResponseMessage result;
 
 			_loggerMock.Setup(l => l.Verbose(It.IsAny<string>()));
-			_relayRepositoryMock.Setup(l => l.GetLink(It.IsAny<string>())).Returns(new Link { IsDisabled = true });
+			_relayRepositoryMock.Setup(l => l.GetLinkRelayInfo(It.IsAny<string>())).Returns(new LinkRelayInfo() { IsDisabled = true });
 			_pathSplitterMock.Setup(p => p.Split(It.IsAny<string>())).Returns(new PathInformation());
 
 			result = await sut.Relay("invalid/targetKey/foo.html");
@@ -182,7 +182,7 @@ namespace Thinktecture.Relay.Server.Controller
 			HttpResponseMessage result;
 
 			_loggerMock.Setup(l => l.Verbose(It.IsAny<string>()));
-			_relayRepositoryMock.Setup(l => l.GetLink(It.IsAny<string>())).Returns(new Link());
+			_relayRepositoryMock.Setup(l => l.GetLinkRelayInfo(It.IsAny<string>())).Returns(new LinkRelayInfo());
 			_pathSplitterMock.Setup(p => p.Split(It.IsAny<string>())).Returns(new PathInformation());
 
 			result = await sut.Relay("invalid");
@@ -200,7 +200,7 @@ namespace Thinktecture.Relay.Server.Controller
 			HttpResponseMessage result;
 
 			_loggerMock.Setup(l => l.Verbose(It.IsAny<string>()));
-			_relayRepositoryMock.Setup(l => l.GetLink(It.IsAny<string>())).Returns(new Link());
+			_relayRepositoryMock.Setup(l => l.GetLinkRelayInfo(It.IsAny<string>())).Returns(new LinkRelayInfo());
 			_pathSplitterMock.Setup(p => p.Split(It.IsAny<string>())).Returns(new PathInformation { PathWithoutUserName = "    " });
 
 			result = await sut.Relay("invalid/      ");
@@ -219,7 +219,7 @@ namespace Thinktecture.Relay.Server.Controller
 			HttpResponseMessage result;
 
 			_loggerMock.Setup(l => l.Verbose(It.IsAny<string>()));
-			_relayRepositoryMock.Setup(l => l.GetLink(It.IsAny<string>())).Returns(new Link { AllowLocalClientRequestsOnly = true });
+			_relayRepositoryMock.Setup(l => l.GetLinkRelayInfo(It.IsAny<string>())).Returns(new LinkRelayInfo { AllowLocalClientRequestsOnly = true });
 			_pathSplitterMock.Setup(p => p.Split(It.IsAny<string>())).Returns(new PathInformation { PathWithoutUserName = "Bar/Baz" });
 
 			result = await sut.Relay("Foo/Bar/Baz");
@@ -239,14 +239,14 @@ namespace Thinktecture.Relay.Server.Controller
 			sut.User = new FakePrincipal();
 			HttpResponseMessage result;
 
-			var linkFake = new Link { Id = Guid.Parse("fb35e2fb-5fb6-4475-baa0-e0b06f5fdeda") };
+			var linkFake = new LinkRelayInfo { Id = Guid.Parse("fb35e2fb-5fb6-4475-baa0-e0b06f5fdeda") };
 			var clientRequestFake = new OnPremiseConnectorRequest { RequestId = "239b6e03-9795-450d-bdd1-ab72900f1a98" };
 			var onPremiseTargetReponseFake = new OnPremiseConnectorResponse();
 			var httpResponseMessageFake = new HttpResponseMessage { StatusCode = HttpStatusCode.Found };
 
 			_loggerMock.Setup(l => l.Verbose(It.IsAny<string>()));
 			_backendCommunicationMock.SetupGet(b => b.OriginId).Returns(new Guid("c9208bdb-c195-460d-b84e-6c146bb252e5"));
-			_relayRepositoryMock.Setup(l => l.GetLink(It.IsAny<string>())).Returns(linkFake);
+			_relayRepositoryMock.Setup(l => l.GetLinkRelayInfo(It.IsAny<string>())).Returns(linkFake);
 			_pathSplitterMock.Setup(p => p.Split(It.IsAny<string>())).Returns(new PathInformation { PathWithoutUserName = "Bar/Baz" });
 			_clientRequestBuilderMock.Setup(c => c.BuildFromHttpRequest(sut.Request, new Guid("c9208bdb-c195-460d-b84e-6c146bb252e5"), "Bar/Baz")).ReturnsAsync(clientRequestFake);
 			_backendCommunicationMock.Setup(b => b.SendOnPremiseConnectorRequest(new Guid("fb35e2fb-5fb6-4475-baa0-e0b06f5fdeda"), clientRequestFake));

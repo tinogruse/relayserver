@@ -14,7 +14,8 @@ namespace Thinktecture.Relay.Server.Security
 			var result = sut.ValidatePassword("username", "12345678aA!", out var errorMessage);
 
 			result.Should().BeTrue();
-			errorMessage.Should().BeNull();
+			errorMessage.Should().NotBeNull();
+			errorMessage.Should().BeEmpty();
 		}
 
 		[TestMethod]

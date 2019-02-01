@@ -35,7 +35,7 @@ namespace Thinktecture.Relay.Server.Http
 			};
 		}
 
-		public HttpResponseMessage BuildFromConnectorResponse(IOnPremiseConnectorResponse response, Link link, string requestId)
+		public HttpResponseMessage BuildFromConnectorResponse(IOnPremiseConnectorResponse response, LinkRelayInfo link, string requestId)
 		{
 			var message = new HttpResponseMessage();
 
@@ -66,7 +66,7 @@ namespace Thinktecture.Relay.Server.Http
 			return message;
 		}
 
-		public HttpContent GetResponseContentForOnPremiseTargetResponse(IOnPremiseConnectorResponse response, Link link)
+		public HttpContent GetResponseContentForOnPremiseTargetResponse(IOnPremiseConnectorResponse response, LinkRelayInfo link)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));

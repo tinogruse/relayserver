@@ -28,7 +28,7 @@ namespace Thinktecture.Relay.Server.Repository
 			_configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 		}
 
-		public PageResult<LinkDetails> GetLinkDetails(PageRequest paging)
+		public PageResult<Link> GetLinks(PageRequest paging)
 		{
 			using (var context = new RelayContext())
 			{
@@ -52,9 +52,9 @@ namespace Thinktecture.Relay.Server.Repository
 				linksQuery = linksQuery.OrderByPropertyName(paging.SortField, paging.SortDirection);
 				linksQuery = linksQuery.ApplyPaging(paging);
 
-				return new PageResult<LinkDetails>()
+				return new PageResult<Link>()
 				{
-					Items = GetLinkDetailsFromDbLink(linksQuery).ToList(),
+					Items = GetLinkFromDbLink(linksQuery).ToList(),
 					Count = numberOfLinks,
 				};
 			}
@@ -104,6 +104,30 @@ namespace Thinktecture.Relay.Server.Repository
 			}
 		}
 
+		public LinkRelayInfo GetLinkRelayInfo(string userName)
+		{
+			using (var context = new RelayContext())
+			{
+				var linkQuery = context.Links
+					.Where(l => l.UserName == userName);
+
+				return GetLinkRelayInfoFromDbLink(linkQuery).FirstOrDefault();
+			}
+		}
+
+		private IQueryable<LinkRelayInfo> GetLinkRelayInfoFromDbLink(IQueryable<DbLink> linksQuery)
+		{
+			return linksQuery
+				.Select(l => new LinkRelayInfo()
+				{
+					Id = l.Id,
+					DisplayName = l.SymbolicName,
+					IsDisabled = l.IsDisabled,
+					AllowLocalClientRequestsOnly = l.AllowLocalClientRequestsOnly,
+					ForwardOnPremiseTargetErrorResponse = l.ForwardOnPremiseTargetErrorResponse,
+				});
+		}
+
 		private IQueryable<Link> GetLinkFromDbLink(IQueryable<DbLink> linksQuery)
 		{
 			return linksQuery
@@ -117,10 +141,11 @@ namespace Thinktecture.Relay.Server.Repository
 				.Select(i => new Link()
 				{
 					Id = i.link.Id,
-					ForwardOnPremiseTargetErrorResponse = i.link.ForwardOnPremiseTargetErrorResponse,
+					UserName = i.link.UserName,
+					DisplayName = i.link.SymbolicName,
 					IsDisabled = i.link.IsDisabled,
-					SymbolicName = i.link.SymbolicName,
-					AllowLocalClientRequestsOnly = i.link.AllowLocalClientRequestsOnly,
+					CreationDate = i.link.CreationDate,
+					ConnectionCount = i.ActiveConnections.Count(),
 				});
 		}
 
@@ -130,7 +155,7 @@ namespace Thinktecture.Relay.Server.Repository
 				.Select(link => new
 				{
 					link,
-					link.ActiveConnections
+					link.ActiveConnections,
 				})
 				.ToList()
 				.Select(i => new LinkDetails()
@@ -139,8 +164,8 @@ namespace Thinktecture.Relay.Server.Repository
 					CreationDate = i.link.CreationDate,
 					ForwardOnPremiseTargetErrorResponse = i.link.ForwardOnPremiseTargetErrorResponse,
 					IsDisabled = i.link.IsDisabled,
-					MaximumLinks = i.link.MaximumLinks,
-					SymbolicName = i.link.SymbolicName,
+					MaximumConnections = i.link.MaximumLinks,
+					DisplayName = i.link.SymbolicName,
 					UserName = i.link.UserName,
 					AllowLocalClientRequestsOnly = i.link.AllowLocalClientRequestsOnly,
 
@@ -151,12 +176,14 @@ namespace Thinktecture.Relay.Server.Repository
 					AbsoluteConnectionLifetime = i.link.AbsoluteConnectionLifetime,
 					SlidingConnectionLifetime = i.link.SlidingConnectionLifetime,
 
-					Connections = i.ActiveConnections
-						.Select(ac => ac.ConnectionId
-							+ "; Versions: Connector = " + ac.ConnectorVersion + ", Assembly = " + ac.AssemblyVersion
-							+ "; Last Activity: " + ac.LastActivity.ToString("yyyy-MM-dd hh:mm:ss")
-							+ ((ac.LastActivity + _configuration.ActiveConnectionTimeout <= DateTime.UtcNow) ? " (inactive)" : "")
-						)
+					Connections = i.ActiveConnections.Select(ac => new LinkConnection()
+						{
+							Id = ac.ConnectionId,
+							ProtocolVersion = ac.ConnectorVersion,
+							AssemblyVersion = ac.AssemblyVersion,
+							LastActivity = ac.LastActivity,
+							IsStalled = ac.LastActivity + _configuration.ActiveConnectionTimeout <= DateTime.UtcNow,
+						})
 						.ToList(),
 				})
 				.AsQueryable();
@@ -226,8 +253,8 @@ namespace Thinktecture.Relay.Server.Repository
 				linkEntity.AllowLocalClientRequestsOnly = link.AllowLocalClientRequestsOnly;
 				linkEntity.ForwardOnPremiseTargetErrorResponse = link.ForwardOnPremiseTargetErrorResponse;
 				linkEntity.IsDisabled = link.IsDisabled;
-				linkEntity.MaximumLinks = link.MaximumLinks;
-				linkEntity.SymbolicName = link.SymbolicName;
+				linkEntity.MaximumLinks = link.MaximumConnections;
+				linkEntity.SymbolicName = link.DisplayName;
 				linkEntity.UserName = link.UserName;
 
 				linkEntity.TokenRefreshWindow = link.TokenRefreshWindow;

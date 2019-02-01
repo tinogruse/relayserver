@@ -68,7 +68,7 @@ namespace Thinktecture.Relay.Server.Http
 				},
 				ContentLength = 4,
 			};
-			var link = new Link();
+			var link = new LinkRelayInfo();
 
 			using (var result = sut.BuildFromConnectorResponse(onPremiseTargetRequest, link, null))
 			{
@@ -153,7 +153,7 @@ namespace Thinktecture.Relay.Server.Http
 		{
 			var sut = new HttpResponseMessageBuilder(null, GetInMemoryStore());
 			var onPremiseTargetResponse = new OnPremiseConnectorResponse { StatusCode = HttpStatusCode.InternalServerError };
-			var link = new Link();
+			var link = new LinkRelayInfo();
 
 			using (var result = sut.GetResponseContentForOnPremiseTargetResponse(onPremiseTargetResponse, link))
 			{
@@ -166,7 +166,7 @@ namespace Thinktecture.Relay.Server.Http
 		{
 			var sut = new HttpResponseMessageBuilder(null, GetInMemoryStore());
 			var onPremiseTargetResponse = new OnPremiseConnectorResponse { StatusCode = HttpStatusCode.NotImplemented };
-			var link = new Link();
+			var link = new LinkRelayInfo();
 
 			using (var result = sut.GetResponseContentForOnPremiseTargetResponse(onPremiseTargetResponse, link))
 			{
@@ -179,7 +179,7 @@ namespace Thinktecture.Relay.Server.Http
 		{
 			var sut = new HttpResponseMessageBuilder(null, GetInMemoryStore());
 			var onPremiseTargetResponse = new OnPremiseConnectorResponse { StatusCode = HttpStatusCode.InternalServerError, Body = new byte[] { 0, 0, 0 }, ContentLength = 3, };
-			var link = new Link { ForwardOnPremiseTargetErrorResponse = true };
+			var link = new LinkRelayInfo() { ForwardOnPremiseTargetErrorResponse = true };
 
 			using (var result = sut.GetResponseContentForOnPremiseTargetResponse(onPremiseTargetResponse, link))
 			{
@@ -194,7 +194,7 @@ namespace Thinktecture.Relay.Server.Http
 		{
 			var sut = new HttpResponseMessageBuilder(null, GetInMemoryStore());
 			var onPremiseTargetResponse = new OnPremiseConnectorResponse { StatusCode = HttpStatusCode.NotImplemented, Body = new byte[] { 0, 0, 0 }, ContentLength = 3, };
-			var link = new Link { ForwardOnPremiseTargetErrorResponse = true };
+			var link = new LinkRelayInfo() { ForwardOnPremiseTargetErrorResponse = true };
 
 			using (var result = sut.GetResponseContentForOnPremiseTargetResponse(onPremiseTargetResponse, link))
 			{
@@ -209,7 +209,7 @@ namespace Thinktecture.Relay.Server.Http
 		{
 			var sut = new HttpResponseMessageBuilder(null, GetInMemoryStore());
 			var onPremiseTargetResponse = new OnPremiseConnectorResponse { StatusCode = HttpStatusCode.OK, Body = new byte[] { 0, 0, 0, 0 }, ContentLength = 4, };
-			var link = new Link();
+			var link = new LinkRelayInfo();
 
 			using (var result = sut.GetResponseContentForOnPremiseTargetResponse(onPremiseTargetResponse, link))
 			{

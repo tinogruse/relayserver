@@ -64,7 +64,7 @@ namespace Thinktecture.Relay.Server.Controller
 			}
 
 			var pathInformation = _pathSplitter.Split(fullPathToOnPremiseEndpoint);
-			var link = _linkRepository.GetLink(pathInformation.UserName);
+			var link = _linkRepository.GetLinkRelayInfo(pathInformation.UserName);
 
 			if (!CanRequestBeHandled(fullPathToOnPremiseEndpoint, pathInformation, link))
 			{
@@ -124,7 +124,7 @@ namespace Thinktecture.Relay.Server.Controller
 			_backendCommunication.SendOnPremiseConnectorRequest(linkId, request);
 		}
 
-		private bool CanRequestBeHandled(string path, PathInformation pathInformation, Link link)
+		private bool CanRequestBeHandled(string path, PathInformation pathInformation, LinkRelayInfo link)
 		{
 			if (link == null)
 			{
@@ -134,19 +134,19 @@ namespace Thinktecture.Relay.Server.Controller
 
 			if (link.IsDisabled)
 			{
-				_logger?.Information("Link {LinkName} is disabled", link.SymbolicName);
+				_logger?.Information("Link {LinkName} is disabled", link.DisplayName);
 				return false;
 			}
 
 			if (String.IsNullOrWhiteSpace(pathInformation.PathWithoutUserName))
 			{
-				_logger?.Information("Path {RequestPath} for link {LinkName} without user name is not found", path, link.SymbolicName);
+				_logger?.Information("Path {RequestPath} for link {LinkName} without user name is not found", path, link.DisplayName);
 				return false;
 			}
 
 			if (link.AllowLocalClientRequestsOnly && !Request.IsLocal())
 			{
-				_logger?.Information("Link {LinkName} only allows local requests", link.SymbolicName);
+				_logger?.Information("Link {LinkName} only allows local requests", link.DisplayName);
 				return false;
 			}
 

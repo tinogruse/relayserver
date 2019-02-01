@@ -33,7 +33,7 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 		[ActionName("links")]
 		public IHttpActionResult GetLinks([FromUri] PageRequest paging)
 		{
-			var result = _linkRepository.GetLinkDetails(paging);
+			var result = _linkRepository.GetLinks(paging);
 
 			return Ok(result);
 		}
