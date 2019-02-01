@@ -83,7 +83,7 @@ namespace Thinktecture.Relay.Server.DependencyInjection
 				builder.RegisterType<FilePostDataTemporaryStore>().As<IPostDataTemporaryStore>().SingleInstance();
 			}
 
-			builder.RegisterType<PasswordComplexityValidator>().AsImplementedInterfaces();
+			builder.RegisterType<NoopPasswordComplexityValidator>().AsImplementedInterfaces();
 
 			_customCodeAssemblyLoader.RegisterModule(builder);
 

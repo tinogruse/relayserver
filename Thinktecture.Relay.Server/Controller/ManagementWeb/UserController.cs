@@ -81,7 +81,7 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 			// validate password complexity by other rules
 			if (!_passwordComplexityValidator.ValidatePassword(user.UserName, user.Password, out var errorMessages))
 			{
-				httpActionResult = BadRequest(String.Join("\n", errorMessages));
+				httpActionResult = BadRequest(errorMessages);
 				return false;
 			}
 

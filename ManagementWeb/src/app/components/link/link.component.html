@@ -1,0 +1,10 @@
+<div class="mat-elevation-z2 trs-flex trs-column">
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link routerLinkActive #info="routerLinkActive" [routerLink]="['info']" [active]="info.isActive" translate>Info</a>
+    <a mat-tab-link routerLinkActive #chart="routerLinkActive" [routerLink]="['chart']" [active]="chart.isActive" translate>Chart</a>
+    <a mat-tab-link routerLinkActive #log="routerLinkActive" [routerLink]="['log']" [active]="log.isActive" translate>Recent activity</a>
+    <a mat-tab-link routerLinkActive #trace="routerLinkActive" [routerLink]="['trace']" [active]="trace.isActive" translate>Tracing</a>
+  </nav>
+
+  <router-outlet></router-outlet>
+</div>

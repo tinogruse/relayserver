@@ -1,0 +1,119 @@
+<div *ngIf="users$ | async" class="mat-elevation-z2 trs-flex trs-column">
+  <mat-form-field class="trs-filter">
+    <input matInput (keyup)="applyFilter($event.target.value)" [placeholder]="'Filter' | translate">
+  </mat-form-field>
+
+  <div class="trs-overflow">
+    <mat-table [dataSource]="dataSource" matSort [matSortDisableClear]="true" matSortActive="userName" matSortDirection="asc">
+      <ng-container matColumnDef="userName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>User name</span></mat-header-cell>
+        <mat-cell *matCellDef="let user">{{ user.userName }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="lockedUntil">
+        <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>Locked until</span></mat-header-cell>
+        <mat-cell *matCellDef="let user" [matTooltip]="user.lockedUntil?.format('L LTS')" matTooltipPosition="left">
+          {{ user.lockedUntil?.calendar() }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="options">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ $implicit: user }">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+    </mat-table>
+  </div>
+</div>
+
+<button mat-fab color="primary" (click)="openCreate()">
+  <mat-icon>add</mat-icon>
+</button>
+
+<mat-menu xPosition="before" #menu="matMenu">
+  <ng-template matMenuContent let-user>
+    <button mat-menu-item (click)="openEdit(user)">
+      <mat-icon>edit</mat-icon>
+      <span translate>Change password</span>
+    </button>
+    <button mat-menu-item [disabled]="user.userName === userName" (click)="openDelete(user)">
+      <mat-icon>delete</mat-icon>
+      <span translate>Delete</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<trs-spinner-overlay *ngIf="submitting"></trs-spinner-overlay>
+
+<ng-template #create let-data>
+  <form #form="ngForm" [trsDialogClose]="data.user">
+    <h1 mat-dialog-title translate>Create user</h1>
+    <div mat-dialog-content class="trs-flex trs-column">
+      <mat-form-field>
+        <input name="userName" matInput [placeholder]="'User name' | translate" #userName="ngModel"
+               maxlength="250" required [(ngModel)]="data.user.userName" trsUserNameAvailable="user">
+        <mat-hint align="end">{{ userName.value?.length || 0 }}/250</mat-hint>
+        <mat-error *ngIf="userName.errors?.available" translate>The user name is already taken.</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input type="password" name="password" matInput [placeholder]="'Password' | translate" #password="ngModel"
+               maxlength="250" required [(ngModel)]="data.user.password">
+        <mat-hint align="end">{{ password.value?.length || 0 }}/250</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input type="password" name="verifyPassword" matInput [placeholder]="'Verify password' | translate" #verifyPassword="ngModel"
+               maxlength="250" required [(ngModel)]="data.user.verifyPassword" [trsEquals]="data.user.password">
+        <mat-hint align="end">{{ verifyPassword.value?.length || 0 }}/250</mat-hint>
+        <mat-error *ngIf="verifyPassword.errors?.equals" translate>The passwords do not match.</mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions align="end">
+      <button mat-button matDialogClose><span translate>Cancel</span></button>
+      <button type="submit" mat-button color="primary" [disabled]="form.invalid || form.pending"><span translate>Create</span></button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #edit let-data>
+  <form #form="ngForm" [trsDialogClose]="data.user">
+    <h1 mat-dialog-title translate>Change password</h1>
+    <div mat-dialog-content class="trs-flex trs-column">
+      <p translate [translateParams]="data.user">Please enter the new password for user USERNAME:</p>
+      <mat-form-field>
+        <input type="password" name="currentPassword" matInput [placeholder]="'Current password' | translate" #currentPassword
+               maxlength="250" required [(ngModel)]="data.user.currentPassword">
+        <mat-hint align="end">{{ currentPassword.value?.length || 0 }}/250</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input type="password" name="password" matInput [placeholder]="'New password' | translate" #password
+               maxlength="250" required [(ngModel)]="data.user.password">
+        <mat-hint align="end">{{ password.value?.length || 0 }}/250</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input type="password" name="verifyPassword" matInput [placeholder]="'Verify password' | translate" #verifyPassword
+               maxlength="250" required [(ngModel)]="data.user.verifyPassword" [trsEquals]="data.user.password">
+        <mat-error *ngIf="verifyPassword.errors?.equals" translate>The passwords do not match.</mat-error>
+        <mat-hint align="end">{{ verifyPassword.value?.length || 0 }}/250</mat-hint>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions align="end">
+      <button mat-button matDialogClose><span translate>Cancel</span></button>
+      <button type="submit" mat-button color="primary" [disabled]="form.invalid"><span translate>Change</span></button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #delete let-data>
+  <h1 mat-dialog-title translate>Delete user</h1>
+  <div mat-dialog-content>
+    <p translate [translateParams]="data.user">Do you really want to delete the user USERNAME?</p>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button matDialogClose><span translate>Cancel</span></button>
+    <button mat-button color="warn" [matDialogClose]="data.user"><span translate>Delete</span></button>
+  </div>
+</ng-template>

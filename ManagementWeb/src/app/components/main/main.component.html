@@ -1,0 +1,20 @@
+<mat-sidenav-container class="trs-flex trs-column trs-full">
+  <mat-sidenav mode="side" [opened]="true" class="mat-elevation-z8">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let item of menu" [routerLink]="item.route">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <a mat-list-item [disableRipple]="true"><span [translate]="item.caption"></span></a>
+      </mat-list-item>
+    </mat-nav-list>
+    <mat-nav-list>
+      <mat-list-item>
+        <mat-icon>power_settings_new</mat-icon>
+        <a mat-list-item (click)="logout()" [disableRipple]="true"><span translate>Logout</span></a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="trs-flex trs-column">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

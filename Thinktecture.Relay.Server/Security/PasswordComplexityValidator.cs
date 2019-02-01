@@ -4,9 +4,18 @@ using System.Linq;
 
 namespace Thinktecture.Relay.Server.Security
 {
-	public class PasswordComplexityValidator : IPasswordComplexityValidator
+	internal class NoopPasswordComplexityValidator : IPasswordComplexityValidator
 	{
-		public bool ValidatePassword(string userName, string password, out IEnumerable<string> errorMessages)
+		public bool ValidatePassword(string userName, string password, out string errorMessage)
+		{
+			errorMessage = null;
+			return true;
+		}
+	}
+
+	internal class PasswordComplexityValidator : IPasswordComplexityValidator
+	{
+		public bool ValidatePassword(string userName, string password, out string errorMessages)
 		{
 			var result = new List<string>();
 
@@ -41,7 +50,7 @@ namespace Thinktecture.Relay.Server.Security
 				result.Add("Password must contain at least one special character.");
 			}
 
-			errorMessages = result;
+			errorMessages = String.Join("\n", result);
 
 			return result.Count == 0;
 		}
