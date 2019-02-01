@@ -58,9 +58,14 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 				return BadRequest();
 			}
 
-			if ((String.IsNullOrWhiteSpace(user.UserName)) || (String.IsNullOrWhiteSpace(user.Password)))
+			if (String.IsNullOrWhiteSpace(user.UserName))
 			{
-				return Ok(new { Errors = new [] { "Cannot create user: User name or password was not provided.", } });
+				return Ok(new { Errors = new [] { "User name was not provided.", } });
+			}
+
+			if (String.IsNullOrWhiteSpace(user.Password))
+			{
+				return Ok(new { Errors = new [] { "Password was not provided.", } });
 			}
 
 			if (!CheckPassword(user, out var result))
@@ -91,9 +96,10 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 		[ActionName("user")]
 		public IHttpActionResult Delete(Guid id)
 		{
-			var result = _userRepository.Delete(id);
+			if (_userRepository.Delete(id))
+				return Ok();
 
-			return result ? (IHttpActionResult) Ok() : BadRequest();
+			return Ok(new {Errors = new [] { "User was not found." } });
 		}
 
 		[HttpPut]
