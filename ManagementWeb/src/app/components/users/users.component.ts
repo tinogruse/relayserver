@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren} from '@angular/core';
 import {MatDialog, MatSort, MatTableDataSource} from '@angular/material';
-import {BehaviorSubject, defer, Observable} from 'rxjs';
-import {filter, finalize, retryWhen, switchMap, tap} from 'rxjs/operators';
+import {BehaviorSubject, defer, Observable, of, throwError} from 'rxjs';
+import {filter, finalize, retry, switchMap, switchMapTo, tap} from 'rxjs/operators';
 import {User} from '../../models/user';
 import {BackendService} from '../../services/backend.service';
 import {SecurityService} from '../../services/security.service';
@@ -50,9 +50,15 @@ export class UsersComponent implements OnInit, AfterViewInit {
   }
 
   private openDialog(templateRef: TemplateRef<any>, user: User): Observable<User> {
-    return this.matDialog.open(templateRef, { data: { user }, disableClose: true }).beforeClose().pipe(
+    return this.matDialog.open(templateRef, { data: { user }, disableClose: true }).beforeClosed().pipe(
       filter(result => !!result),
       tap(() => this.submitting++),
+    );
+  }
+
+  private openErrorDialog(title: string, errors: string[]): Observable<never> {
+    return this.matDialog.open(SimpleDialogComponent, { data: { title, contents: errors } }).afterClosed().pipe(
+      switchMapTo(throwError('retry')),
     );
   }
 
@@ -60,14 +66,8 @@ export class UsersComponent implements OnInit, AfterViewInit {
     const user = {} as User;
     defer(() => this.openDialog(this.create, user)).pipe(
       switchMap(() => this.backend.createUser(user).pipe(finalize(() => this.submitting--))),
-      retryWhen(result => result.pipe(
-        switchMap(error => this.matDialog.open(SimpleDialogComponent, {
-          data: {
-            title: 'Creating the user failed',
-            contents: error.error.message.split('\n'),
-          },
-        }).afterClosed()),
-      )),
+      switchMap(result => result.errors ? this.openErrorDialog('Creating the user failed', result.errors) : of(result)),
+      retry(),
     ).subscribe(() => this.refresh$.next(true));
   }
 
@@ -75,21 +75,15 @@ export class UsersComponent implements OnInit, AfterViewInit {
     user = JSON.parse(JSON.stringify(user));
     defer(() => this.openDialog(this.edit, user)).pipe(
       switchMap(() => this.backend.updateUser(user).pipe(finalize(() => this.submitting--))),
-      retryWhen(result => result.pipe(
-        switchMap(error => this.matDialog.open(SimpleDialogComponent, {
-          data: {
-            title: 'Updating the user failed',
-            contents: error.error.message.split('\n'),
-          },
-        }).afterClosed()),
-      )),
+      switchMap(result => result.errors ? this.openErrorDialog('Updating the user failed', result.errors) : of(result)),
+      retry(),
     ).subscribe(() => this.refresh$.next(true));
   }
 
   openDelete(user: User) {
     this.openDialog(this.delete, user).pipe(
       switchMap(() => this.backend.deleteUser(user).pipe(finalize(() => this.submitting--))),
-      tap({ error: () => this.matDialog.open(SimpleDialogComponent, { data: { title: 'Deleting the user failed' } }) }),
+      switchMap(result => result.errors ? this.openErrorDialog('Deleting the user failed', result.errors) : of(result)),
     ).subscribe(() => this.refresh$.next(true));
   }
 }

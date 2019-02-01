@@ -82,7 +82,7 @@
   <form #form="ngForm" [trsDialogClose]="data.user">
     <h1 mat-dialog-title translate>Change password</h1>
     <div mat-dialog-content class="trs-flex trs-column">
-      <p translate [translateParams]="data.user">Please enter the new password for user USERNAME:</p>
+      <p translate [translateParams]="data.user">Please enter the current password of USERNAME and the desired new password:</p>
       <mat-form-field>
         <input type="password" name="currentPassword" matInput [placeholder]="'Current password' | translate" #currentPassword
                maxlength="250" required [(ngModel)]="data.user.currentPassword">

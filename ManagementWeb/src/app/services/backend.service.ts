@@ -17,6 +17,10 @@ import {User} from '../models/user';
 
 const backendUrl = `${environment.backendUrl}api/managementweb/`;
 
+export interface ErrorResult {
+  errors?: string[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class BackendService {
   constructor(private readonly httpClient: HttpClient, private readonly matDialog: MatDialog, private readonly router: Router) {
@@ -78,28 +82,20 @@ export class BackendService {
 
   getUsers(): Observable<User[]> {
     return this.httpClient.get<User[]>(`${backendUrl}user/users`).pipe(
-      tap(users => {
-        users.forEach(user => {
-          user.creationDate = moment(user.creationDate);
-
-          if (user.lockedUntil) {
-            user.lockedUntil = moment(user.lockedUntil);
-          }
-        });
-      }),
+      tap(users => users.forEach(user => user.lockedUntil = user.lockedUntil && moment(user.lockedUntil))),
     );
   }
 
-  createUser(user: User): Observable<void> {
-    return this.httpClient.post<void>(`${backendUrl}user/user`, user);
+  createUser(user: User): Observable<ErrorResult> {
+    return this.httpClient.post(`${backendUrl}user/user`, user);
   }
 
-  updateUser(user: User): Observable<void> {
-    return this.httpClient.put<void>(`${backendUrl}user/user`, user);
+  updateUser(user: User): Observable<ErrorResult> {
+    return this.httpClient.put(`${backendUrl}user/user`, user);
   }
 
-  deleteUser(user: User): Observable<void> {
-    return this.httpClient.delete<void>(`${backendUrl}user/user`, { params: { id: user.id } });
+  deleteUser(user: User): Observable<ErrorResult> {
+    return this.httpClient.delete(`${backendUrl}user/user`, { params: { id: user.id } });
   }
 
   getLinks(page: PageRequest): Observable<PageResult<Link>> {

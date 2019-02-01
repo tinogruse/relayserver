@@ -28,7 +28,7 @@
   "Locked until": "Gesperrt bis",
   "Create user": "Benutzer erstellen",
   "Change password": "Passwort ändern",
-  "Please enter the new password for user USERNAME:": "Bitte geben Sie das neue Passwort für den Benutzer \"{{userName}}\" an:",
+  "Please enter the current password of USERNAME and the desired new password:": "Bitte geben Sie das aktuell und das neue Passwort für den Benutzer \"{{userName}}\" an:",
   "Delete user": "Benutzer löschen",
   "Do you really want to delete the user USERNAME?": "Möchten Sie den Benutzer \"{{userName}}\" wirklich löschen?",
   "Do you really want to delete the link SYMBOLICNAME?": "Möchten Sie den Link \"{{symbolicName}}\" wirklich löschen?",
