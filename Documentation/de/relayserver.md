@@ -7,6 +7,11 @@
 
 # Release Notes
 
+## Version 3.0
+
+* Breaking changes:
+  * Signatur von `IUserPasswordComplexityValidator.ValidatePassword` wurde geändert.
+
 ## Version 2.1.0
 
 * Server-Seitige Link-Konfiguration

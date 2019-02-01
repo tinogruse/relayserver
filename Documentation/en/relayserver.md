@@ -16,6 +16,11 @@ The goal of this list is to highlight companies who pay back to this open source
 
 # Version history
 
+## Version 3.0
+
+* Breaking changes:
+  * Signatur of `IUserPasswordComplexityValidator.ValidatePassword` was changed.
+
 ## Version 2.1.0
 
 * Server-side Link configuration
