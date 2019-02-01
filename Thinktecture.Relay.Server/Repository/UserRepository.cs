@@ -27,11 +27,6 @@ namespace Thinktecture.Relay.Server.Repository
 
 		public Guid Create(string userName, string password)
 		{
-			if ((String.IsNullOrWhiteSpace(userName)) || (String.IsNullOrWhiteSpace(password)))
-			{
-				return Guid.Empty;
-			}
-
 			var passwordInformation = _passwordHash.CreatePasswordInformation(Encoding.UTF8.GetBytes(password));
 
 			var dbUser = new DbUser
@@ -105,7 +100,6 @@ namespace Thinktecture.Relay.Server.Repository
 					{
 						u.Id,
 						u.UserName,
-						u.CreationDate,
 						u.FailedLoginAttempts,
 						u.LastFailedLoginAttempt,
 					})
@@ -114,7 +108,6 @@ namespace Thinktecture.Relay.Server.Repository
 					{
 						Id = u.Id,
 						UserName = u.UserName,
-						CreationDate = u.CreationDate,
 						LockedUntil = LockedOutUntil(u.FailedLoginAttempts, u.LastFailedLoginAttempt),
 					});
 			}
@@ -178,7 +171,6 @@ namespace Thinktecture.Relay.Server.Repository
 
 				return new User()
 				{
-					CreationDate = dbUser.CreationDate,
 					Id = dbUser.Id,
 					UserName = dbUser.UserName,
 				};

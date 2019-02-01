@@ -6,16 +6,16 @@ namespace Thinktecture.Relay.Server.Security
 {
 	internal class NoopPasswordComplexityValidator : IPasswordComplexityValidator
 	{
-		public bool ValidatePassword(string userName, string password, out string errorMessage)
+		public bool ValidatePassword(string userName, string password, out IEnumerable<string> errorMessages)
 		{
-			errorMessage = null;
+			errorMessages = null;
 			return true;
 		}
 	}
 
 	internal class PasswordComplexityValidator : IPasswordComplexityValidator
 	{
-		public bool ValidatePassword(string userName, string password, out string errorMessages)
+		public bool ValidatePassword(string userName, string password, out IEnumerable<string> errorMessages)
 		{
 			var result = new List<string>();
 
@@ -50,7 +50,7 @@ namespace Thinktecture.Relay.Server.Security
 				result.Add("Password must contain at least one special character.");
 			}
 
-			errorMessages = String.Join("\n", result);
+			errorMessages = result;
 
 			return result.Count == 0;
 		}

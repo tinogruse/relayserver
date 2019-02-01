@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Thinktecture.Relay.Server.Security
 {
 	/// <summary>
@@ -10,8 +12,8 @@ namespace Thinktecture.Relay.Server.Security
 		/// </summary>
 		/// <param name="userName">The name of the user</param>
 		/// <param name="password">The password to validate</param>
-		/// <param name="errorMessage">The error message that will be displayed to the user when the password does not match the complexity rules</param>
+		/// <param name="errorMessages">The error message that will be displayed to the user when the password does not match the complexity rules</param>
 		/// <returns>True, if the password can be used; otherwise false</returns>
-		bool ValidatePassword(string userName, string password, out string errorMessage);
+		bool ValidatePassword(string userName, string password, out IEnumerable<string> errorMessages);
 	}
 }

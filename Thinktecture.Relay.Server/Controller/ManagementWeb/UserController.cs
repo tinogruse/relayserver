@@ -58,34 +58,19 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 				return BadRequest();
 			}
 
+			if ((String.IsNullOrWhiteSpace(user.UserName)) || (String.IsNullOrWhiteSpace(user.Password)))
+			{
+				return Ok(new { Errors = new [] { "Cannot create user: User name or password was not provided.", } });
+			}
+
 			if (!CheckPassword(user, out var result))
 			{
 				return result;
 			}
 
-			var id = _userRepository.Create(user.UserName, user.Password);
+			_userRepository.Create(user.UserName, user.Password);
 
-			if (id == Guid.Empty)
-			{
-				return BadRequest();
-			}
-
-			// TODO: Location
-			return Created("", id);
-		}
-
-		private bool CheckPassword(CreateUser user, out IHttpActionResult httpActionResult)
-		{
-			httpActionResult = null;
-
-			// validate password complexity by other rules
-			if (!_passwordComplexityValidator.ValidatePassword(user.UserName, user.Password, out var errorMessages))
-			{
-				httpActionResult = BadRequest(errorMessages);
-				return false;
-			}
-
-			return true;
+			return Ok();
 		}
 
 		[HttpGet]
@@ -96,7 +81,7 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 
 			if (user == null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
 			return Ok(user);
@@ -108,7 +93,7 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 		{
 			var result = _userRepository.Delete(id);
 
-			return result ? (IHttpActionResult)Ok() : BadRequest();
+			return result ? (IHttpActionResult) Ok() : BadRequest();
 		}
 
 		[HttpPut]
@@ -124,12 +109,12 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 			var authenticatedUser = _userRepository.Authenticate(user.UserName, user.CurrentPassword);
 			if (authenticatedUser == null)
 			{
-				return BadRequest("Current password is not correct.");
+				return Ok(new { Errors = new [] { "Current password is not correct.", } });
 			}
 
 			if (user.CurrentPassword == user.Password)
 			{
-				return BadRequest("New password must be different from current one.");
+				return Ok(new { Errors = new [] { "New password must be different from current one.", } });
 			}
 
 			if (!CheckPassword(user, out var error))
@@ -139,7 +124,7 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 
 			var result = _userRepository.Update(authenticatedUser.Id, user.Password);
 
-			return result ? (IHttpActionResult)Ok() : BadRequest();
+			return result ? (IHttpActionResult) Ok() : BadRequest();
 		}
 
 		[HttpGet]
@@ -152,6 +137,20 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 			}
 
 			return Conflict();
+		}
+
+		private bool CheckPassword(CreateUser user, out IHttpActionResult httpActionResult)
+		{
+			httpActionResult = null;
+
+			// validate password complexity by other rules
+			if (!_passwordComplexityValidator.ValidatePassword(user.UserName, user.Password, out var errorMessages))
+			{
+				httpActionResult = Ok(new { Errors = errorMessages });
+				return false;
+			}
+
+			return true;
 		}
 	}
 }

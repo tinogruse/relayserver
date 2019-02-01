@@ -1,12 +1,13 @@
+using System.Collections.Generic;
 using Thinktecture.Relay.Server.Security;
 
 namespace Thinktecture.Relay.CustomCodeDemo
 {
 	internal class NoopPasswordComplexityValidator : IPasswordComplexityValidator
 	{
-		public bool ValidatePassword(string userName, string password, out string errorMessage)
+		public bool ValidatePassword(string userName, string password, out IEnumerable<string> errorMessages)
 		{
-			errorMessage = null;
+			errorMessages = null;
 			return true;
 		}
 	}
