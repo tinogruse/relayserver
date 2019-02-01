@@ -1,5 +1,7 @@
 {
   "Please enter the current password of USERNAME and the desired new password:": "Please enter the current password of \"{{userName}}\" and the desired new password:",
   "Do you really want to delete the user USERNAME?": "Do you really want to delete the user \"{{userName}}\"?",
-  "Do you really want to delete the link SYMBOLICNAME?": "Do you really want to delete the link \"{{symbolicName}}\"?"
+  "Do you really want to delete the link DISPLAYNAME?": "Do you really want to delete the link \"{{displayName}}\"?",
+  "VALUE second": "{{value}} seconds",
+  "VALUE minute": "{{value}} minutes"
 }

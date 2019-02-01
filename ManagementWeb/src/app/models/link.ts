@@ -1,21 +1,35 @@
-import {Moment} from 'moment';
+import {Duration, Moment} from 'moment';
 
 export interface Connection {
-  connectionId: string;
+  id: string;
   lastActivity: Moment;
   assemblyVersion: string;
-  connectorVersion: number;
+  protocolVersion: number;
+  isStalled: boolean;
 }
 
 export interface Link {
   id: string;
+  creationDate: Moment;
+  userName: string;
+  displayName: string;
+  connectionCount: number;
+  isDisabled: boolean;
+}
+
+export interface LinkCreate {
   userName: string;
   password: string;
-  creationDate: Moment;
-  isConnected: boolean;
+}
+
+export interface LinkDetail extends Link {
   connections: Connection[];
-  isDisabled: boolean;
-  symbolicName: string;
   allowLocalClientRequestsOnly: boolean;
   forwardOnPremiseTargetErrorResponse: boolean;
+  tokenRefreshWindow?: Duration;
+  heartbeatInterval?: Duration;
+  reconnectMinWaitTime?: Duration;
+  reconnectMaxWaitTime?: Duration;
+  absoluteConnectionLifetime?: Duration;
+  slidingConnectionLifetime?: Duration;
 }

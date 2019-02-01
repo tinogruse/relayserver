@@ -14,9 +14,11 @@ a.mat-button {
 }
 
 .mat-column-isConnected {
-  width: 40px;
+  width: 120px;
   flex: none;
+
   display: flex;
+  justify-content: center;
 }
 
 .mat-column-options {

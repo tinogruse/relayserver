@@ -1,0 +1,16 @@
+<mat-list-item>
+  <h4 translate>
+    <mat-checkbox #checkbox [checked]="value !== null" (change)="toggleValue($event.checked)">
+      <span translate>{{ caption }}</span>
+    </mat-checkbox>
+
+    <ng-container [ngSwitch]="value">
+      <span *ngSwitchCase="null" class="value" translate>Not set (server default)</span>
+      <span *ngSwitchCase="0" class="value" translate>Disabled</span>
+      <span *ngSwitchDefault class="value" translate [translateParams]="{ value: value }">VALUE {{ unit }}</span>
+    </ng-container>
+  </h4>
+
+  <mat-slider [disabled]="!checkbox.checked" [min]="0" [max]="max" [step]="step" [value]="lastValue"
+              (input)="setValue($event.value)"></mat-slider>
+</mat-list-item>

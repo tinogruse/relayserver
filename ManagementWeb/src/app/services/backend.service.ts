@@ -9,7 +9,7 @@ import {environment} from '../../environments/environment';
 import {SimpleDialogComponent} from '../components/simple-dialog/simple-dialog.component';
 import {ContentBytesChartDataItem, processContentBytesChartDataItem} from '../models/content-bytes-chart-data-item';
 import {Dashboard} from '../models/dashboard';
-import {Link} from '../models/link';
+import {Link, LinkCreate, LinkDetail} from '../models/link';
 import {PageRequest} from '../models/page-request';
 import {PageResult} from '../models/page-result';
 import {processRequestLogEntry, RequestLogEntry} from '../models/request-log-entry';
@@ -87,15 +87,15 @@ export class BackendService {
   }
 
   createUser(user: User): Observable<ErrorResult> {
-    return this.httpClient.post(`${backendUrl}user/user`, user);
+    return this.httpClient.post<ErrorResult>(`${backendUrl}user/user`, user);
   }
 
   updateUser(user: User): Observable<ErrorResult> {
-    return this.httpClient.put(`${backendUrl}user/user`, user);
+    return this.httpClient.put<ErrorResult>(`${backendUrl}user/user`, user);
   }
 
   deleteUser(user: User): Observable<ErrorResult> {
-    return this.httpClient.delete(`${backendUrl}user/user`, { params: { id: user.id } });
+    return this.httpClient.delete<ErrorResult>(`${backendUrl}user/user`, { params: { id: user.id } });
   }
 
   getLinks(page: PageRequest): Observable<PageResult<Link>> {
@@ -104,18 +104,26 @@ export class BackendService {
     );
   }
 
-  getLink(id: string): Observable<Link> {
-    return this.httpClient.get<Link>(`${backendUrl}link/link`, { params: { id } }).pipe(
-      tap(link => link.creationDate = moment(link.creationDate)),
+  getLink(id: string): Observable<LinkDetail> {
+    return this.httpClient.get<LinkDetail>(`${backendUrl}link/link`, { params: { id } }).pipe(
+      tap(link => {
+        link.creationDate = moment(link.creationDate);
+        link.tokenRefreshWindow = link.tokenRefreshWindow && moment.duration(link.tokenRefreshWindow);
+        link.heartbeatInterval = link.heartbeatInterval && moment.duration(link.heartbeatInterval);
+        link.reconnectMinWaitTime = link.reconnectMinWaitTime && moment.duration(link.reconnectMinWaitTime);
+        link.reconnectMaxWaitTime = link.reconnectMaxWaitTime && moment.duration(link.reconnectMaxWaitTime);
+        link.absoluteConnectionLifetime = link.absoluteConnectionLifetime && moment.duration(link.absoluteConnectionLifetime);
+        link.slidingConnectionLifetime = link.slidingConnectionLifetime && moment.duration(link.slidingConnectionLifetime);
+      }),
     );
   }
 
-  createLink(link: Link): Observable<void> {
-    return this.httpClient.post<void>(`${backendUrl}link/link`, link);
+  createLink(link: Link): Observable<LinkCreate & ErrorResult> {
+    return this.httpClient.post<LinkCreate & ErrorResult>(`${backendUrl}link/link`, link);
   }
 
-  deleteLink(link: Link): Observable<void> {
-    return this.httpClient.delete<void>(`${backendUrl}link/link`, { params: { id: link.id } });
+  deleteLink(link: Link): Observable<ErrorResult> {
+    return this.httpClient.delete<ErrorResult>(`${backendUrl}link/link`, { params: { id: link.id } });
   }
 
   getChart(id: string): Observable<ContentBytesChartDataItem[]> {

@@ -1,7 +1,7 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog, PageEvent, Sort} from '@angular/material';
-import {BehaviorSubject, combineLatest, defer, Observable} from 'rxjs';
-import {filter, finalize, retryWhen, switchMap, tap} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, defer, Observable, of, throwError} from 'rxjs';
+import {filter, finalize, retry, switchMap, switchMapTo, tap} from 'rxjs/operators';
 import {Link} from '../../models/link';
 import {PageRequest} from '../../models/page-request';
 import {PageResult} from '../../models/page-result';
@@ -16,7 +16,7 @@ import {SimpleDialogComponent} from '../simple-dialog/simple-dialog.component';
 export class LinksComponent implements OnInit {
   private readonly refresh$ = new BehaviorSubject<boolean>(true);
   private readonly filter$ = new BehaviorSubject<string>('');
-  private readonly sort$ = new BehaviorSubject<Sort>({ active: 'symbolicName', direction: 'asc' });
+  private readonly sort$ = new BehaviorSubject<Sort>({ active: 'displayName', direction: 'asc' });
   private readonly page$ = new BehaviorSubject<PageEvent>({ pageIndex: 0, pageSize: 10, length: 0 });
 
   constructor(private readonly backend: BackendService, private readonly matDialog: MatDialog) {
@@ -30,7 +30,7 @@ export class LinksComponent implements OnInit {
   @ViewChild('credentials') credentials: TemplateRef<any>;
 
   readonly pageRequest: PageRequest = { pageIndex: 0, pageSize: 10 };
-  readonly tableColumns = ['symbolicName', 'userName', 'creationDate', 'isConnected', 'options'];
+  readonly tableColumns = ['displayName', 'userName', 'creationDate', 'isConnected', 'options'];
   readonly pageSizes = [10, 20, 50, 100];
 
   ngOnInit() {
@@ -82,8 +82,14 @@ export class LinksComponent implements OnInit {
     );
   }
 
-  updateUserName(link: Link, value: string) {
-    link.userName = value ? value.replace(/\s/g, '-') : '';
+  private openErrorDialog(title: string, errors: string[]): Observable<never> {
+    return this.matDialog.open(SimpleDialogComponent, { data: { title, contents: errors } }).afterClosed().pipe(
+      switchMapTo(throwError('retry')),
+    );
+  }
+
+  updateUserName(link: Link) {
+    link.userName = link.displayName ? link.displayName.replace(/\s/g, '-') : '';
   }
 
   copyPassword(input: HTMLInputElement) {
@@ -95,14 +101,8 @@ export class LinksComponent implements OnInit {
     const link = {} as Link;
     defer(() => this.openDialog(this.create, link)).pipe(
       switchMap(() => this.backend.createLink(link).pipe(finalize(() => this.submitting--))),
-      retryWhen(result => result.pipe(
-        switchMap(error => this.matDialog.open(SimpleDialogComponent, {
-          data: {
-            title: 'Creating the link failed',
-            contents: error.error.message.split('\n'),
-          },
-        }).afterClosed()),
-      )),
+      switchMap(result => result.errors ? this.openErrorDialog('Creating the link failed', result.errors) : of(result)),
+      retry(),
       tap(result => this.matDialog.open(this.credentials, { data: { link: result } })),
     ).subscribe(() => this.refresh$.next(true));
   }
@@ -110,7 +110,7 @@ export class LinksComponent implements OnInit {
   openDelete(link: Link) {
     this.openDialog(this.delete, link).pipe(
       switchMap(() => this.backend.deleteLink(link).pipe(finalize(() => this.submitting--))),
-      tap({ error: () => this.matDialog.open(SimpleDialogComponent, { data: { title: 'Deleting the link failed' } }) }),
+      switchMap(result => result.errors ? this.openErrorDialog('Deleting the link failed', result.errors) : of(result)),
     ).subscribe(() => this.refresh$.next(true));
   }
 }

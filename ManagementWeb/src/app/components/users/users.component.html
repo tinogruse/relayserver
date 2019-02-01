@@ -72,8 +72,8 @@
       </mat-form-field>
     </div>
     <div mat-dialog-actions align="end">
-      <button mat-button matDialogClose><span translate>Cancel</span></button>
-      <button type="submit" mat-button color="primary" [disabled]="form.invalid || form.pending"><span translate>Create</span></button>
+      <button mat-button matDialogClose translate>Cancel</button>
+      <button type="submit" mat-button color="primary" [disabled]="form.invalid || form.pending" translate>Create</button>
     </div>
   </form>
 </ng-template>
@@ -101,8 +101,8 @@
       </mat-form-field>
     </div>
     <div mat-dialog-actions align="end">
-      <button mat-button matDialogClose><span translate>Cancel</span></button>
-      <button type="submit" mat-button color="primary" [disabled]="form.invalid"><span translate>Change</span></button>
+      <button mat-button matDialogClose translate>Cancel</button>
+      <button type="submit" mat-button color="primary" [disabled]="form.invalid" translate>Change</button>
     </div>
   </form>
 </ng-template>
@@ -113,7 +113,7 @@
     <p translate [translateParams]="data.user">Do you really want to delete the user USERNAME?</p>
   </div>
   <div mat-dialog-actions align="end">
-    <button mat-button matDialogClose><span translate>Cancel</span></button>
-    <button mat-button color="warn" [matDialogClose]="data.user"><span translate>Delete</span></button>
+    <button mat-button matDialogClose translate>Cancel</button>
+    <button mat-button color="warn" [matDialogClose]="data.user" translate>Delete</button>
   </div>
 </ng-template>

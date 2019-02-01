@@ -1,6 +1,37 @@
-.card {
-  width: 300px;
-
+mat-card {
   margin: 10px;
-  padding: 10px;
+  flex: 1;
+}
+
+.summary h4 {
+  width: 200px;
+}
+
+.link ::ng-deep h4 {
+  width: 500px;
+}
+
+.connections {
+  .mat-column-id {
+    white-space: nowrap;
+  }
+
+  .mat-column-lastActivity {
+    width: 150px;
+    flex: none;
+  }
+
+  .mat-column-protocolVersion,
+  .mat-column-assemblyVersion {
+    width: 125px;
+    flex: none;
+  }
+
+  .mat-column-isStalled {
+    width: 120px;
+    flex: none;
+
+    display: flex;
+    justify-content: center;
+  }
 }

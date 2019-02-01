@@ -4,11 +4,11 @@
   </mat-form-field>
 
   <div class="trs-overflow">
-    <mat-table [dataSource]="result.items" matSort [matSortDisableClear]="true" matSortActive="symbolicName" matSortDirection="asc"
+    <mat-table [dataSource]="result.items" matSort [matSortDisableClear]="true" matSortActive="displayName" matSortDirection="asc"
                (matSortChange)="changeSort($event)">
-      <ng-container matColumnDef="symbolicName">
+      <ng-container matColumnDef="displayName">
         <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>Symbolic name</span></mat-header-cell>
-        <mat-cell *matCellDef="let link"><a [routerLink]="[link.id]" class="mat-button mat-primary">{{ link.symbolicName }}</a></mat-cell>
+        <mat-cell *matCellDef="let link"><a [routerLink]="[link.id]" class="mat-button mat-primary">{{ link.displayName }}</a></mat-cell>
       </ng-container>
       <ng-container matColumnDef="userName">
         <mat-header-cell *matHeaderCellDef mat-sort-header><span translate>User name</span></mat-header-cell>
@@ -21,8 +21,10 @@
       <ng-container matColumnDef="isConnected">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let link">
-          <mat-icon *ngIf="link.isConnected" [matTooltip]="'Connected' | translate" matTooltipPosition="left">cloud</mat-icon>
-          <mat-icon *ngIf="!link.isConnected" [matTooltip]="'Disconnected' | translate" matTooltipPosition="left">cloud_off</mat-icon>
+          <mat-chip-list [ngSwitch]="link.connectionCount">
+            <mat-chip *ngSwitchCase="0" color="warn" selected disableRipple><span translate>Offline</span></mat-chip>
+            <mat-chip *ngSwitchDefault color="primary" selected disableRipple><span translate>{{ link.connectionCount }} Online</span></mat-chip>
+          </mat-chip-list>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="options">
@@ -63,21 +65,21 @@
     <h1 mat-dialog-title translate>Create link</h1>
     <div mat-dialog-content class="trs-flex trs-column">
       <mat-form-field>
-        <input name="symbolicName" matInput [placeholder]="'Description' | translate" #symbolicName="ngModel"
-               (keyup)="userName.pristine && updateUserName(data.link, $event.target.value)"
-               maxlength="250" required [(ngModel)]="data.link.symbolicName">
-        <mat-hint align="end">{{ symbolicName.value?.length || 0 }}/250</mat-hint>
+        <input name="displayName" matInput [placeholder]="'Display Name' | translate" #displayName="ngModel"
+               (ngModelChange)="userName.pristine && updateUserName(data.link)"
+               maxlength="250" required [(ngModel)]="data.link.displayName">
+        <mat-hint align="end">{{ displayName.value?.length || 0 }}/250</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input name="userName" matInput [placeholder]="'Name' | translate" #userName="ngModel"
+        <input name="userName" matInput [placeholder]="'User Name' | translate" #userName="ngModel"
                maxlength="250" required [(ngModel)]="data.link.userName" trsUserNameAvailable="link">
         <mat-hint align="end">{{ userName.value?.length || 0 }}/250</mat-hint>
         <mat-error *ngIf="userName.errors?.available" translate>The user name is already taken.</mat-error>
       </mat-form-field>
     </div>
     <div mat-dialog-actions align="end">
-      <button mat-button matDialogClose><span translate>Cancel</span></button>
-      <button type="submit" mat-button color="primary" [disabled]="form.invalid || form.pending"><span translate>Create</span></button>
+      <button mat-button matDialogClose translate>Cancel</button>
+      <button type="submit" mat-button color="primary" [disabled]="form.invalid || form.pending" translate>Create</button>
     </div>
   </form>
 </ng-template>
@@ -85,11 +87,11 @@
 <ng-template #delete let-data>
   <h1 mat-dialog-title translate>Delete link</h1>
   <div mat-dialog-content>
-    <p translate [translateParams]="data.link">Do you really want to delete the link SYMBOLICNAME?</p>
+    <p translate [translateParams]="data.link">Do you really want to delete the link DISPLAYNAME?</p>
   </div>
   <div mat-dialog-actions align="end">
-    <button mat-button matDialogClose><span translate>Cancel</span></button>
-    <button mat-button color="warn" [matDialogClose]="data.link"><span translate>Delete</span></button>
+    <button mat-button matDialogClose translate>Cancel</button>
+    <button mat-button color="warn" [matDialogClose]="data.link" translate>Delete</button>
   </div>
 </ng-template>
 
@@ -109,6 +111,6 @@
     </mat-list>
   </div>
   <div mat-dialog-actions align="end">
-    <button mat-button color="primary" matDialogClose (click)="copyPassword(password)"><span translate>Copy password</span></button>
+    <button mat-button color="primary" matDialogClose (click)="copyPassword(password)" translate>Copy password</button>
   </div>
 </ng-template>

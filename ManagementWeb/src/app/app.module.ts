@@ -5,6 +5,7 @@ import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
+  MatChipsModule,
   MatDialogModule,
   MatIconModule,
   MatInputModule,
@@ -13,6 +14,8 @@ import {
   MatPaginatorModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
   MatSortModule,
   MatTableModule,
   MatTabsModule,
@@ -32,6 +35,7 @@ import {DashboardChartComponent} from './components/dashboard-chart/dashboard-ch
 import {DashboardLogComponent} from './components/dashboard-log/dashboard-log.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {LinkChartComponent} from './components/link-chart/link-chart.component';
+import {DurationSliderComponent} from './components/link-info/duration-slider/duration-slider.component';
 import {LinkInfoComponent} from './components/link-info/link-info.component';
 import {LinkLogComponent} from './components/link-log/link-log.component';
 import {LinkTraceLogComponent} from './components/link-trace-log/link-trace-log.component';
@@ -83,6 +87,7 @@ export function createTranslateLoader(http: HttpClient) {
     LinkLogComponent,
     LinkTraceComponent,
     LinkTraceLogComponent,
+    DurationSliderComponent,
   ],
   imports: [
     BrowserModule,
@@ -114,6 +119,9 @@ export function createTranslateLoader(http: HttpClient) {
     MatMenuModule,
     MatSortModule,
     MatPaginatorModule,
+    MatChipsModule,
+    MatSlideToggleModule,
+    MatSliderModule,
   ],
   providers: [
     { provide: LOCALE_ID, useFactory: localeIdFactory, deps: [TranslateService] },

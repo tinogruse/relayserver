@@ -1,16 +1,24 @@
+:host {
+  flex: 1;
+}
+
 mat-sidenav {
   ::ng-deep .mat-drawer-inner-container {
     display: flex;
     flex-direction: column;
   }
+
+  mat-nav-list:last-of-type {
+    margin-top: auto;
+  }
+}
+
+mat-sidenav-container {
+  height: 100%;
 }
 
 mat-sidenav-content {
   padding: 16px;
-}
-
-mat-nav-list:last-of-type {
-  margin-top: auto;
 }
 
 .mat-nav-list {

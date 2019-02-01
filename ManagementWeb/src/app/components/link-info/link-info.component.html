@@ -1,14 +1,97 @@
-<div class="trs-flex trs-wrap">
-  <div class="card mat-elevation-z1">
-    Test
+<ng-container *ngIf="link$ | async as link; else loading">
+  <div class="trs-flex">
+    <mat-card class="summary">
+      <mat-card-title>{{ link.displayName }}</mat-card-title>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <h4 translate>ID</h4>
+            <p>{{ link.id }}</p>
+          </mat-list-item>
+          <mat-list-item>
+            <h4 translate>User name</h4>
+            <p>{{ link.userName }}</p>
+          </mat-list-item>
+          <mat-list-item>
+            <h4 translate>Creation date</h4>
+            <p>{{ link.creationDate.format('L LTS') }}</p>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
   </div>
-  <div class="card mat-elevation-z1">
-    Test
+  <div class="trs-flex trs-wrap">
+    <mat-card class="link">
+      <mat-card-title translate>Link</mat-card-title>
+      <mat-card-content>
+        <mat-list>
+          <h3 mat-subheader translate>Settings</h3>
+          <mat-list-item>
+            <h4 translate>Allow local client requests only</h4>
+            <mat-slide-toggle [(ngModel)]="link.allowLocalClientRequestsOnly" (change)="updateLink(link)"></mat-slide-toggle>
+          </mat-list-item>
+          <mat-list-item>
+            <h4 translate>Forward on-premise target error response</h4>
+            <mat-slide-toggle [(ngModel)]="link.forwardOnPremiseTargetErrorResponse" (change)="updateLink(link)"></mat-slide-toggle>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <h3 mat-subheader translate>Durations</h3>
+          <trs-duration-slider caption="Token refresh window" unit="second" [max]="120" [step]="1"
+                               [(value)]="tokenRefreshWindow" (valueChange)="updateLink(link)"></trs-duration-slider>
+          <trs-duration-slider caption="Heartbeat interval" unit="second" [max]="600" [step]="1"
+                               [(value)]="heartbeatInterval" (valueChange)="updateLink(link)"></trs-duration-slider>
+          <trs-duration-slider caption="Reconnect minimum wait time" unit="second" [max]="300" [step]="1"
+                               [(value)]="reconnectMinWaitTime" (valueChange)="updateLink(link)"></trs-duration-slider>
+          <trs-duration-slider caption="Reconnect maximum wait time" unit="second" [max]="300" [step]="1"
+                               [(value)]="reconnectMaxWaitTime" (valueChange)="updateLink(link)"></trs-duration-slider>
+          <trs-duration-slider caption="Absolute connection lifetime" unit="minute" [max]="360" [step]="10"
+                               [(value)]="absoluteConnectionLifetime" (valueChange)="updateLink(link)"></trs-duration-slider>
+          <trs-duration-slider caption="Sliding connection lifetime" unit="minute" [max]="60" [step]="5"
+                               [(value)]="slidingConnectionLifetime" (valueChange)="updateLink(link)"></trs-duration-slider>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="connections">
+      <mat-card-title translate>Connections</mat-card-title>
+      <mat-card-content>
+        <mat-table *ngIf="link.connections.length; else disconnected" [dataSource]="link.connections">
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef><span translate>Id</span></mat-header-cell>
+            <mat-cell *matCellDef="let connection">{{ connection.id }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="lastActivity">
+            <mat-header-cell *matHeaderCellDef><span translate>Last activity</span></mat-header-cell>
+            <mat-cell *matCellDef="let connection">{{ connection.lastActivity?.format('L LTS') }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="protocolVersion">
+            <mat-header-cell *matHeaderCellDef><span translate>Protocol version</span></mat-header-cell>
+            <mat-cell *matCellDef="let connection">{{ connection.protocolVersion }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="assemblyVersion">
+            <mat-header-cell *matHeaderCellDef><span translate>Assembly version</span></mat-header-cell>
+            <mat-cell *matCellDef="let connection">{{ connection.assemblyVersion }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="isStalled">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let connection">
+              <mat-chip-list *ngIf="connection.isStalled">
+                <mat-chip color="warn" selected disableRipple><span translate>Stalled</span></mat-chip>
+              </mat-chip-list>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+        </mat-table>
+      </mat-card-content>
+    </mat-card>
   </div>
-  <div class="card mat-elevation-z1">
-    Test
-  </div>
-  <div class="card mat-elevation-z1">
-    Test
-  </div>
-</div>
+</ng-container>
+
+<ng-template #loading>
+  <trs-spinner-overlay></trs-spinner-overlay>
+</ng-template>
+
+<ng-template #disconnected>
+  <p translate>There are no connections available.</p>
+</ng-template>

@@ -31,7 +31,9 @@
   "Please enter the current password of USERNAME and the desired new password:": "Bitte geben Sie das aktuell und das neue Passwort für den Benutzer \"{{userName}}\" an:",
   "Delete user": "Benutzer löschen",
   "Do you really want to delete the user USERNAME?": "Möchten Sie den Benutzer \"{{userName}}\" wirklich löschen?",
-  "Do you really want to delete the link SYMBOLICNAME?": "Möchten Sie den Link \"{{symbolicName}}\" wirklich löschen?",
+  "Do you really want to delete the link DISPLAYNAME?": "Möchten Sie den Link \"{{displayName}}\" wirklich löschen?",
   "Connected": "Verbunden",
-  "Disconnected": "Getrennt"
+  "Disconnected": "Getrennt",
+  "VALUE second": "{{value}} Sekunden",
+  "VALUE minute": "{{value}} Minuten"
 }
