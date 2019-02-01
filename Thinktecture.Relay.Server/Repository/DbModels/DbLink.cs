@@ -31,7 +31,7 @@ namespace Thinktecture.Relay.Server.Repository.DbModels
 
 		[Required]
 		[MaxLength(250)]
-		public string SymbolicName { get; set; }
+		public string DisplayName { get; set; }
 
 		[Required]
 		public bool IsDisabled { get; set; }
@@ -43,7 +43,7 @@ namespace Thinktecture.Relay.Server.Repository.DbModels
 		public bool AllowLocalClientRequestsOnly { get; set; }
 
 		[Required]
-		public int MaximumLinks { get; set; }
+		public int MaximumConnections { get; set; }
 
 		[Required]
 		public DateTime CreationDate { get; set; }

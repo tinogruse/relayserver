@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -54,10 +53,9 @@ namespace Thinktecture.Relay.Server.Controller.ManagementWeb
 		[ActionName("link")]
 		public IHttpActionResult CreateLink(CreateLink link)
 		{
-			var result = _linkRepository.CreateLink(link.SymbolicName, link.UserName);
+			var result = _linkRepository.CreateLink(link.DisplayName, link.UserName);
 
-			// TODO: Fill route
-			return Created("", result);
+			return Ok(result);
 		}
 
 		[HttpPut]

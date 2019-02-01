@@ -37,13 +37,13 @@ namespace Thinktecture.Relay.Server.Repository
 				if (!String.IsNullOrWhiteSpace(paging.SearchText))
 				{
 					var searchText = paging.SearchText.ToLower();
-					linksQuery = linksQuery.Where(w => w.UserName.Contains(searchText) || w.SymbolicName.Contains(searchText));
+					linksQuery = linksQuery.Where(w => w.UserName.Contains(searchText) || w.DisplayName.Contains(searchText));
 				}
 
 				// Default sorting must be provided
 				if (String.IsNullOrWhiteSpace(paging.SortField))
 				{
-					paging.SortField = "SymbolicName";
+					paging.SortField = nameof(Link.DisplayName);
 					paging.SortDirection = SortDirection.Asc;
 				}
 
@@ -121,7 +121,7 @@ namespace Thinktecture.Relay.Server.Repository
 				.Select(l => new LinkRelayInfo()
 				{
 					Id = l.Id,
-					DisplayName = l.SymbolicName,
+					DisplayName = l.DisplayName,
 					IsDisabled = l.IsDisabled,
 					AllowLocalClientRequestsOnly = l.AllowLocalClientRequestsOnly,
 					ForwardOnPremiseTargetErrorResponse = l.ForwardOnPremiseTargetErrorResponse,
@@ -142,7 +142,7 @@ namespace Thinktecture.Relay.Server.Repository
 				{
 					Id = i.link.Id,
 					UserName = i.link.UserName,
-					DisplayName = i.link.SymbolicName,
+					DisplayName = i.link.DisplayName,
 					IsDisabled = i.link.IsDisabled,
 					CreationDate = i.link.CreationDate,
 					ConnectionCount = i.ActiveConnections.Count(),
@@ -164,8 +164,8 @@ namespace Thinktecture.Relay.Server.Repository
 					CreationDate = i.link.CreationDate,
 					ForwardOnPremiseTargetErrorResponse = i.link.ForwardOnPremiseTargetErrorResponse,
 					IsDisabled = i.link.IsDisabled,
-					MaximumConnections = i.link.MaximumLinks,
-					DisplayName = i.link.SymbolicName,
+					MaximumConnections = i.link.MaximumConnections,
+					DisplayName = i.link.DisplayName,
 					UserName = i.link.UserName,
 					AllowLocalClientRequestsOnly = i.link.AllowLocalClientRequestsOnly,
 
@@ -209,7 +209,7 @@ namespace Thinktecture.Relay.Server.Repository
 				.AsQueryable();
 		}
 
-		public CreateLinkResult CreateLink(string symbolicName, string userName)
+		public CreateLinkResult CreateLink(string displayName, string userName)
 		{
 			using (var context = new RelayContext())
 			{
@@ -222,7 +222,7 @@ namespace Thinktecture.Relay.Server.Repository
 					Password = passwordInformation.Hash,
 					Salt = passwordInformation.Salt,
 					Iterations = passwordInformation.Iterations,
-					SymbolicName = symbolicName,
+					DisplayName = displayName,
 					UserName = userName,
 					CreationDate = DateTime.UtcNow,
 				};
@@ -253,8 +253,8 @@ namespace Thinktecture.Relay.Server.Repository
 				linkEntity.AllowLocalClientRequestsOnly = link.AllowLocalClientRequestsOnly;
 				linkEntity.ForwardOnPremiseTargetErrorResponse = link.ForwardOnPremiseTargetErrorResponse;
 				linkEntity.IsDisabled = link.IsDisabled;
-				linkEntity.MaximumLinks = link.MaximumConnections;
-				linkEntity.SymbolicName = link.DisplayName;
+				linkEntity.MaximumConnections = link.MaximumConnections;
+				linkEntity.DisplayName = link.DisplayName;
 				linkEntity.UserName = link.UserName;
 
 				linkEntity.TokenRefreshWindow = link.TokenRefreshWindow;

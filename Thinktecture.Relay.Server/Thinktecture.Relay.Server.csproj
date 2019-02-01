@@ -324,6 +324,10 @@
     <Compile Include="Migrations\201901311556307_AddLinkConfigurationOptions.Designer.cs">
       <DependentUpon>201901311556307_AddLinkConfigurationOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902011502219_RenameLinkColumns.cs" />
+    <Compile Include="Migrations\201902011502219_RenameLinkColumns.Designer.cs">
+      <DependentUpon>201902011502219_RenameLinkColumns.cs</DependentUpon>
+    </Compile>
     <Compile Include="OnPremise\IOnPremiseConnectorRequest.cs" />
     <Compile Include="OnPremise\IOnPremiseConnectorResponse.cs" />
     <Compile Include="OnPremise\OnPremiseConnectorResponse.cs" />
@@ -492,6 +496,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901311556307_AddLinkConfigurationOptions.resx">
       <DependentUpon>201901311556307_AddLinkConfigurationOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902011502219_RenameLinkColumns.resx">
+      <DependentUpon>201902011502219_RenameLinkColumns.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

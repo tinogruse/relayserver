@@ -10,7 +10,7 @@ namespace Thinktecture.Relay.Server.Repository
 		PageResult<Link> GetLinks(PageRequest paging);
 		LinkDetails GetLinkDetails(Guid linkId);
 		Link GetLink(string userName);
-		CreateLinkResult CreateLink(string symbolicName, string userName);
+		CreateLinkResult CreateLink(string displayName, string userName);
 		bool UpdateLink(LinkDetails link);
 		void DeleteLink(Guid linkId);
 
