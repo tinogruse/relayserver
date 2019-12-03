@@ -31,6 +31,7 @@ namespace Thinktecture.Relay.Server.Service
 				app.UseDeveloperExceptionPage();
 			}
 
+			app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed(_ => true));
 			app.UseHttpsRedirection();
 
 			app.UseRouting();

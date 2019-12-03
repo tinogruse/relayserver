@@ -12,9 +12,9 @@ namespace Microsoft.Extensions.DependencyInjection
 		public static IServiceCollection AddRelayServer(this IServiceCollection services, IConfiguration configuration)
 		{
 			// Todo: Make configurable
-			services.TryAddSingleton<IJsonSerializer>(new CustomJsonSerializer());
-			services.TryAddSingleton<IRequestResponseBodyStore>(new InMemoryRequestResponseBodyStore());
-			services.TryAddSingleton<IRequestResponseQueue>(new InMemoryRequestResponseQueue());
+			services.TryAddSingleton<IJsonSerializer, CustomJsonSerializer>();
+			services.TryAddSingleton<IRequestResponseBodyStore, InMemoryRequestResponseBodyStore>();
+			services.TryAddSingleton<IRequestResponseQueue, InMemoryRequestResponseQueue>();
 
 			services.AddScoped<IRequestDispatcher, RequestDispatcher>();
 
@@ -22,6 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
 			services.Configure<RelayServerOptions>(configuration.GetSection("RelayServer"));
 
+			services.AddHostedService<QueueToHubAdapter>();
 			services.AddMvcCore().AddApplicationPart(typeof(ServiceCollectionExtensions).Assembly);
 			services.AddSignalR();
 

@@ -27,7 +27,8 @@ namespace Thinktecture.Relay.Server.Relay.Services
 		{
 			var link = httpContext.GetRouteValue("LinkName").ToString();
 			var target = httpContext.GetRouteValue("TargetName").ToString();
-			var path = httpContext.GetRouteValue("OnPremisesTargetPath").ToString();
+			var path = httpContext.GetRouteValue("OnPremisesTargetPath").ToString()
+				+ httpContext.Request.QueryString;
 
 			_logger.LogInformation("DISPATCHER Received request for Link {link} and Target {target} with Path {path}", link, target, path);
 
