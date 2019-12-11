@@ -14,7 +14,6 @@ using Serilog;
 using Thinktecture.Relay.OnPremiseConnector.OnPremiseTarget;
 using Thinktecture.Relay.OnPremiseConnector.IdentityModel;
 using Thinktecture.Relay.OnPremiseConnector.Interceptor;
-using Thinktecture.Relay.OnPremiseConnector.SignalR.Classic;
 
 namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 {
@@ -261,7 +260,7 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 
 			try
 			{
-				CreateSignalrClient();
+				await CreateSignalRClientAsync().ConfigureAwait(false);
 
 				await _signalrClient.Start().ConfigureAwait(false);
 				ConnectedSince = DateTime.UtcNow;
@@ -297,7 +296,7 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 			Disconnect(false);
 		}
 
-		private void CreateSignalrClient()
+		private async Task CreateSignalRClientAsync()
 		{
 			if (_signalrClient != null)
 			{
@@ -311,14 +310,21 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 				_signalrClient = null;
 			}
 
-			// Todo: Determine Server Version. If >= 3.0.0 use SignalR Core, otherwise use classic SignalR client.
-			// For now its the classic client only
-			_signalrClient = new SignalRConnection(_logger, Uri, _versionAssembly, _CONNECTOR_VERSION, _tokenType, _accessToken);
+			var isCoreServer = await DetermineIsNetCoreServerAsync().ConfigureAwait(false);
+
+			_signalrClient = isCoreServer
+				? (ISignalRConnection) new Core.SignalRConnection(_logger, Uri, _versionAssembly, _CONNECTOR_VERSION, _tokenType, _accessToken)
+				: new Classic.SignalRConnection(_logger, Uri, _versionAssembly, _CONNECTOR_VERSION, _tokenType, _accessToken);
 
 			_signalrClient.RequestReceived += RequestReceived;
 			_signalrClient.ConnectionClosed += ConnectionClosed;
 			_signalrClient.Reconnecting += OnReconnecting;
 			_signalrClient.Reconnected += OnReconnected;
+		}
+
+		private async Task<bool> DetermineIsNetCoreServerAsync()
+		{
+			return true;
 		}
 
 		private void Disconnect(bool reconnecting)
