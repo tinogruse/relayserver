@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using Serilog;
 using Thinktecture.Relay.OnPremiseConnector.OnPremiseTarget;
 
-namespace Thinktecture.Relay.OnPremiseConnector.SignalR
+namespace Thinktecture.Relay.OnPremiseConnector.SignalR.Classic
 {
 	internal class SignalRConnection : Connection, ISignalRConnection
 	{
@@ -20,10 +20,11 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 			set => Headers["Authorization"] = $"{value.Key} {value.Value}";
 		}
 
-		public SignalRConnection(ILogger logger, Uri relayServerUri, Assembly versionAssembly, int connectorVersion, int relayServerConnectionInstanceId)
+		public SignalRConnection(ILogger logger, Uri relayServerUri, Assembly versionAssembly, int connectorVersion, string tokenType, string accessToken)
 			: base(new Uri(relayServerUri, "/signalr").AbsoluteUri, $"cv={connectorVersion}&av={versionAssembly.GetName().Version}")
 		{
 			_logger = logger;
+			AccessToken = new KeyValuePair<string, string>(tokenType, accessToken);
 		}
 
 		protected override void OnMessageReceived(JToken message)

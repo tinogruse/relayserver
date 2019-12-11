@@ -14,6 +14,7 @@ using Serilog;
 using Thinktecture.Relay.OnPremiseConnector.OnPremiseTarget;
 using Thinktecture.Relay.OnPremiseConnector.IdentityModel;
 using Thinktecture.Relay.OnPremiseConnector.Interceptor;
+using Thinktecture.Relay.OnPremiseConnector.SignalR.Classic;
 
 namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 {
@@ -312,10 +313,7 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 
 			// Todo: Determine Server Version. If >= 3.0.0 use SignalR Core, otherwise use classic SignalR client.
 			// For now its the classic client only
-			_signalrClient = new SignalRConnection(_logger, Uri, _versionAssembly, _CONNECTOR_VERSION, RelayServerConnectionInstanceId)
-			{
-				AccessToken = new KeyValuePair<string, string>(_tokenType, _accessToken),
-			};
+			_signalrClient = new SignalRConnection(_logger, Uri, _versionAssembly, _CONNECTOR_VERSION, _tokenType, _accessToken);
 
 			_signalrClient.RequestReceived += RequestReceived;
 			_signalrClient.ConnectionClosed += ConnectionClosed;
