@@ -664,11 +664,6 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 			return TimeSpan.FromSeconds(_random.Next((int)_minReconnectWaitTime.TotalSeconds, (int)_maxReconnectWaitTime.TotalSeconds));
 		}
 
-		private class RequestContext
-		{
-			public bool IsRelayServerNotified { get; set; }
-		}
-
 		protected virtual void OnDisposing()
 		{
 			Disposing?.Invoke(this, EventArgs.Empty);
