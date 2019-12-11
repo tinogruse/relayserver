@@ -28,5 +28,10 @@ namespace Thinktecture.Relay.OnPremiseConnector.OnPremiseTarget
 		public bool IsHeartbeatOrPingRequest => IsHeartbeatRequest || IsPingRequest;
 		[JsonIgnore]
 		public bool IsConfigurationRequest => HttpMethod == "CONFIG";
+
+		public override string ToString()
+		{
+			return JsonConvert.SerializeObject(this);
+		}
 	}
 }
