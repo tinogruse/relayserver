@@ -40,7 +40,7 @@ namespace Thinktecture.Relay.Server.Relay.Services
 			await data.CopyToAsync(ms).ConfigureAwait(false);
 			ms.Position = 0;
 
-			_data.Add(bodyId, ms);
+			_data[bodyId] = ms;
 		}
 
 		public Task<Stream> GetBodyAsync(Guid linkId, Guid bodyId)

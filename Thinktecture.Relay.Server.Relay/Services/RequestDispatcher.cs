@@ -27,7 +27,7 @@ namespace Thinktecture.Relay.Server.Relay.Services
 		{
 			var link = httpContext.GetRouteValue("LinkName").ToString();
 			var target = httpContext.GetRouteValue("TargetName").ToString();
-			var path = httpContext.GetRouteValue("OnPremisesTargetPath").ToString()
+			var path = httpContext.GetRouteValue("OnPremisesTargetPath")?.ToString()
 				+ httpContext.Request.QueryString;
 
 			_logger.LogInformation("DISPATCHER Received request for Link {link} and Target {target} with Path {path}", link, target, path);
@@ -62,17 +62,32 @@ namespace Thinktecture.Relay.Server.Relay.Services
 			// if we get one fetch body and prepare result
 			if (response != null)
 			{
-				var result = new HttpResponseMessage((HttpStatusCode) response.StatusCode);
-
-				foreach (var header in response.HttpHeaders)
-				{
-					result.Headers.Add(header.Key, header.Value);
-				}
+				var result = new HttpResponseMessage((HttpStatusCode)response.StatusCode);
 
 				var body = await _bodyStore.GetBodyAsync(Guid.Empty, requestId);
 				if (body != null)
 				{
 					result.Content = new StreamContent(body);
+				}
+
+
+				foreach (var header in response.HttpHeaders)
+				{
+					try
+					{
+						if (header.Key.Contains("Content", StringComparison.InvariantCultureIgnoreCase))
+						{
+							result.Content.Headers.Add(header.Key, header.Value);
+						}
+						else
+						{
+							result.Headers.Add(header.Key, header.Value);
+						}
+					}
+					catch (Exception ex)
+					{
+						_logger.LogWarning(ex, "An error occured while copying http header {Header} with value {value}", header.Key, header.Value);
+					}
 				}
 
 				return result;

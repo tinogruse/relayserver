@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,8 @@ namespace Thinktecture.Relay.Server.Relay.Controllers
 			_logger.LogInformation("RESPONSECONTROLLER Received response.");
 
 			var responseString = Request.Headers["X-TTRELAY-METADATA"];
-			var response = _jsonSerializer.Deserialize<RelayedResponse>(responseString);
+			var response = // _jsonSerializer.Deserialize<RelayedResponse>(responseString);
+				JsonSerializer.Deserialize<RelayedResponse>(responseString);
 
 			if (Request.Body != null)
 			{

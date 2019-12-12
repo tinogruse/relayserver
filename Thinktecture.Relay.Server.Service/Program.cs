@@ -14,7 +14,7 @@ namespace Thinktecture.Relay.Server.Service
 			try
 			{
 				Log.Logger = new LoggerConfiguration()
-					.MinimumLevel.Verbose()
+					.MinimumLevel.Debug()
 					.Enrich.FromLogContext()
 					.Enrich.WithProperty("Application", "RelayServer Core")
 					.WriteTo.Console()

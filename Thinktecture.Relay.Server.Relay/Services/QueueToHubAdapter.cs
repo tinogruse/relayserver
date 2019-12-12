@@ -20,7 +20,9 @@ namespace Thinktecture.Relay.Server.Relay.Services
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			using (_queue.Requests.Subscribe(r => _hub.Clients.All.ReceiveRequest(r)))
+			using (_queue.Requests.Subscribe(async r => {
+				await _hub.Clients.All.ReceiveRequest(r).ConfigureAwait(false);
+			}))
 			{
 				while (!stoppingToken.IsCancellationRequested)
 				{
