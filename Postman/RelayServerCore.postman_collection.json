@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "0359c5d0-4d12-48ce-90ca-debb40475e7f",
+		"name": "Core",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Determine version of relay server",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/Version",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"Version"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST https://localhost:5001/relay/link/target/path",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/javascript",
+						"type": "text"
+					},
+					{
+						"key": "SomeHeader",
+						"value": "SomeValue",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"test\": \"test\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/relay/LinkName/TargetName/Request/Path?param=value",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"relay",
+						"LinkName",
+						"TargetName",
+						"Request",
+						"Path"
+					],
+					"query": [
+						{
+							"key": "param",
+							"value": "value"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Request Body",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/request/:requestId/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"request",
+						":requestId",
+						""
+					],
+					"variable": [
+						{
+							"key": "requestId",
+							"value": "affeaffe-affe-affe-affe-affeaffeaffe"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ACKNOWLEDGE received request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/request/acknowledge?oid={00000000-0000-0000-0000-000000000000}&aid={affeaffe-affe-affe-affe-affeaffeaffe}&cid={deadbeef-dead-dead-dead-deadbeefdead}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"request",
+						"acknowledge"
+					],
+					"query": [
+						{
+							"key": "oid",
+							"value": "{00000000-0000-0000-0000-000000000000}"
+						},
+						{
+							"key": "aid",
+							"value": "{affeaffe-affe-affe-affe-affeaffeaffe}"
+						},
+						{
+							"key": "cid",
+							"value": "{deadbeef-dead-dead-dead-deadbeefdead}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forward a request to the RelayServer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-TTRELAY-METADATA",
+						"value": "{ \"requestId\" : \"affeaffe-affe-affe-affe-affeaffeaffe\", \"originId\" : \"deadbeef-dead-dead-beef-deadbeefdead\", \"requestStarted\": \"2019-12-03T10:00:00\", \"requestFinished\": \"2019-12-03T10:00:10\", \"statusCode\": 200, \"httpHeaders\": {\"x-header\":\"value\",\"x-header2\":\"value\"} }",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"response\": \"content\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/forward",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"forward"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
