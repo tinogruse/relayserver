@@ -77,7 +77,7 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR.Core
 
 		public void Dispose()
 		{
-			_connection.DisposeAsync().RunSynchronously();
+			_connection.DisposeAsync();
 		}
 	}
 }
