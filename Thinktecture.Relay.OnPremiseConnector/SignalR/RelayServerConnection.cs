@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NuGet.Versioning;
 using Serilog;
 using Thinktecture.Relay.OnPremiseConnector.OnPremiseTarget;
 using Thinktecture.Relay.OnPremiseConnector.IdentityModel;
@@ -324,7 +325,29 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR
 
 		private async Task<bool> DetermineIsNetCoreServerAsync()
 		{
-			return true;
+			var response = await GetToRelayAsync("/Version", CancellationToken.None).ConfigureAwait(false);
+
+			if (response.IsSuccessStatusCode)
+			{
+				using (var sr = new JsonTextReader(new StreamReader(await response.Content.ReadAsStreamAsync())))
+				{
+					var version = _jsonSerializer.Deserialize<RelayServerVersion>(sr);
+					return version.SemanticRelayVersion.Major >= 3;
+				}
+			}
+
+			return false;
+		}
+
+		private class RelayServerVersion
+		{
+			public string RelayVersion { get; set; }
+			public string HostVersion { get; set; }
+
+			[JsonIgnore]
+			public SemanticVersion SemanticRelayVersion => SemanticVersion.Parse(RelayVersion);
+			[JsonIgnore]
+			public SemanticVersion SemanticHostVersion => SemanticVersion.Parse(HostVersion);
 		}
 
 		private void Disconnect(bool reconnecting)
