@@ -25,7 +25,7 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR.Core
 			AccessToken = new KeyValuePair<string, string>(tokenType, accessToken);
 
 			_connection = new HubConnectionBuilder()
-				.WithUrl($"{relayServerUri}/onpremises", options => {
+				.WithUrl($"{relayServerUri}onpremises", options => {
 					options.AccessTokenProvider = () => Task.FromResult(AccessToken.Value);
 					options.Headers = new Dictionary<string, string>()
 					{
@@ -34,28 +34,33 @@ namespace Thinktecture.Relay.OnPremiseConnector.SignalR.Core
 					};
 				})
 				.WithAutomaticReconnect()
+				.ConfigureLogging(lb => lb.AddSerilog())
 				.Build();
 
 			_connection.Reconnecting += (ex) =>
 			{
+				logger.Information("SignalR connection is reconnecting.");
 				Reconnecting?.Invoke();
 				return Task.CompletedTask;
 			};
 
 			_connection.Reconnected += (connectionId) =>
 			{
+				logger.Information("SignalR connection has reconnected.");
 				Reconnected?.Invoke();
 				return Task.CompletedTask;
 			};
 
 			_connection.Closed += (ex) =>
 			{
+				logger.Information("SignalR connection closed.");
 				ConnectionClosed?.Invoke();
 				return Task.CompletedTask;
 			};
 
 			_connection.On<OnPremiseTargetRequest>("ReceiveRequest", (request) =>
 			{
+				logger.Information("SignalR connection received request.");
 				RequestReceived?.Invoke(this, new RequestReceivedEventArgs(request, _connection.ConnectionId));
 			});
 		}
