@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Thinktecture.Relay.Server.Authentication\Thinktecture.Relay.Server.Authentication.csproj" />
     <ProjectReference Include="..\Thinktecture.Relay.Server.Relay\Thinktecture.Relay.Server.Relay.csproj" />
   </ItemGroup>
 

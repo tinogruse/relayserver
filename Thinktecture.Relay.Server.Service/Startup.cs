@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Thinktecture.Relay.Server.Authentication.Extensions;
 
 namespace Thinktecture.Relay.Server.Service
 {
@@ -41,7 +42,9 @@ namespace Thinktecture.Relay.Server.Service
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
-				endpoints.MapRelayServer();
+				endpoints
+					.MapRelayServer()
+					.WithRelayServerAuthentication();
 			});
 		}
 	}

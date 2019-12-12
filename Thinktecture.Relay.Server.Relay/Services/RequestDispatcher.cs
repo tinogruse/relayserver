@@ -70,7 +70,6 @@ namespace Thinktecture.Relay.Server.Relay.Services
 					result.Content = new StreamContent(body);
 				}
 
-
 				foreach (var header in response.HttpHeaders)
 				{
 					try

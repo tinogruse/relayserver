@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thinktecture.Relay.OnPremis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thinktecture.Relay.OnPremiseConnectorService", "Thinktecture.Relay.OnPremiseConnectorService\Thinktecture.Relay.OnPremiseConnectorService.csproj", "{FEDA9154-6CF6-4D24-B3BD-731EE0C646F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thinktecture.Relay.Server.Authentication", "Thinktecture.Relay.Server.Authentication\Thinktecture.Relay.Server.Authentication.csproj", "{6D60AD71-1BF8-4790-A506-44486A84AC2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thinktecture.Relay.Server.Abstractions", "Thinktecture.Relay.Server.Abstractions\Thinktecture.Relay.Server.Abstractions.csproj", "{F9F1697F-C290-4D06-8AF7-682633BCD5BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{FEDA9154-6CF6-4D24-B3BD-731EE0C646F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEDA9154-6CF6-4D24-B3BD-731EE0C646F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEDA9154-6CF6-4D24-B3BD-731EE0C646F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D60AD71-1BF8-4790-A506-44486A84AC2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D60AD71-1BF8-4790-A506-44486A84AC2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D60AD71-1BF8-4790-A506-44486A84AC2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D60AD71-1BF8-4790-A506-44486A84AC2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9F1697F-C290-4D06-8AF7-682633BCD5BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9F1697F-C290-4D06-8AF7-682633BCD5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9F1697F-C290-4D06-8AF7-682633BCD5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9F1697F-C290-4D06-8AF7-682633BCD5BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +67,8 @@ Global
 		{B9B043C8-89FA-4AD6-A5CF-CA7156034044} = {42D66F97-F350-4851-809A-5D46254851BF}
 		{3DEEFEF9-7F61-450B-B515-7BAF82A974D8} = {DE697754-FCCC-419B-8188-29C146C4F7ED}
 		{FEDA9154-6CF6-4D24-B3BD-731EE0C646F4} = {DE697754-FCCC-419B-8188-29C146C4F7ED}
+		{6D60AD71-1BF8-4790-A506-44486A84AC2D} = {5DEA7D97-3BB0-4308-897D-E329CE9DB962}
+		{F9F1697F-C290-4D06-8AF7-682633BCD5BA} = {5DEA7D97-3BB0-4308-897D-E329CE9DB962}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00A8C877-F671-4C4D-B4DD-82E508EB928B}

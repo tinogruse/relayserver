@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Thinktecture.Relay.Server;
+using Thinktecture.Relay.Server.Relay.Extensions;
 using Thinktecture.Relay.Server.Relay.Hubs;
 using Thinktecture.Relay.Server.Relay.Middlewares;
 using Thinktecture.Relay.Server.Relay.Options;
@@ -10,14 +12,18 @@ namespace Microsoft.AspNetCore.Routing
 {
 	public static class EndpointRouteBuilderExtensions
 	{
-		public static void MapRelayServer(this IEndpointRouteBuilder endpoints)
+		public static IRelayServerEndpointRouteBuilder MapRelayServer(this IEndpointRouteBuilder routeBuilder)
 		{
+			var endpoints = new RelayServerEndpointRouteBuilder(routeBuilder);
+
 			var config = endpoints.ServiceProvider.GetRequiredService<IOptions<RelayServerOptions>>().Value;
 
 			endpoints.MapMiddleware<RelayingMiddleware>(BuildRelayRouteTemplate(config));
 			endpoints.MapHub<OnPremisesHub>(config.AbsoluteConnectorPath);
 
 			endpoints.MapAreaControllerRoute("OnPremisesControllers", "OnPremises", BuildOnPremisesRouteTemplate(config));
+
+			return endpoints;
 		}
 
 		public static void MapMiddleware<T>(this IEndpointRouteBuilder endpoints, string pattern)
