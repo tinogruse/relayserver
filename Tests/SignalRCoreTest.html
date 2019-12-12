@@ -10,7 +10,7 @@
 </body>
 <script>
   const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:5001/onpremises")
+    .withUrl("http://localhost:20000/onpremises")
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
