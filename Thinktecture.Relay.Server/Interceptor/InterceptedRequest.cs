@@ -67,7 +67,11 @@ namespace Thinktecture.Relay.Server.Interceptor
 				_logger.Information("Interceptor accessed the content of the request. Creating a COPY of the content stream to prevent multiple reads of the actual request stream. This might cause additional memory overhead.");
 
 				Body = new byte[ContentLength];
-				Stream.Read(Body, 0, (int)ContentLength);
+
+				if (Stream != null && ContentLength > 0)
+				{
+					Stream.Read(Body, 0, (int)ContentLength);
+				}
 			}
 
 			return new MemoryStream(Body);

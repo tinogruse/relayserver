@@ -63,7 +63,7 @@ namespace Thinktecture.Relay.Server.Interceptor
 				Stream = new MemoryStream(Body);
 			}
 
-			return new MemoryStream(Body);
+			return new MemoryStream(Body ?? Array.Empty<byte>());
 		}
 
 		private void SetContentLength(Stream stream)
